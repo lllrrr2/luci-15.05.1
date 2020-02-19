@@ -48,6 +48,27 @@ msgstr "15分钟负载:"
 msgid "5 Minute Load:"
 msgstr "5分钟负载:"
 
+msgid "6-octet identifier as a hex string - no colons"
+msgstr "十六进制表示的 6 字节标识符，无冒号分隔"
+
+msgid "802.11r Fast Transition"
+msgstr "802.11r 快速切换"
+
+msgid "802.11w Association SA Query maximum timeout"
+msgstr "802.11w 关联 SA 查询最大超时"
+
+msgid "802.11w Association SA Query retry timeout"
+msgstr "802.11w 关联 SA 查询重试超时"
+
+msgid "802.11w Management Frame Protection"
+msgstr "802.11w 管理帧保护"
+
+msgid "802.11w maximum timeout"
+msgstr "802.11w 最大超时"
+
+msgid "802.11w retry timeout"
+msgstr "802.11w 重试超时"
+
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 msgstr "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
 
@@ -2109,6 +2130,13 @@ msgstr "必须使用TLS"
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "某些ISP需要，例如:同轴线网络DOCSIS 3"
 
+msgid ""
+"Requires the 'full' version of wpad/hostapd and support from the wifi driver "
+"<br />(as of Feb 2017: ath9k and ath10k, in LEDE also mwlwifi and mt76)"
+msgstr ""
+"需要完整版本的 wpad/hostapd，并且 WiFi 驱动支持<br />（截止 2017.02，已知支持"
+"此特性的驱动有 ath9k、ath10k，以及 LEDE 中的 mwlwifi 和 mt76）"
+
 msgid "Reset"
 msgstr "复位"
 
@@ -2837,6 +2865,13 @@ msgstr "已用"
 
 msgid "Used Key Slot"
 msgstr "启用密码组"
+
+msgid ""
+"Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not "
+"needed with normal WPA(2)-PSK."
+msgstr ""
+"用于两种不同的用途：RADIUS NAS ID 和 802.11r R0KH-ID，普通 WPA(2)-PSK 不需"
+"要。"
 
 msgid "User certificate (PEM encoded)"
 msgstr "客户证书(PEM加密的)"
