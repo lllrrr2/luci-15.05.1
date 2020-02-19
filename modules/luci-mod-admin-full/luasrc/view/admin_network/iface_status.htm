@@ -25,7 +25,7 @@
 						html += String.format('<strong><%:Uptime%>:</strong> %t<br />', ifc.uptime);
 					}
 
-					if (ifc.type != 'tunnel')
+					if (ifc.macaddr)
 					{
 						html += String.format('<strong><%:MAC-Address%>:</strong> %s<br />', ifc.macaddr);
 					}
@@ -41,9 +41,8 @@
 					{
 						for (var i = 0; i < ifc.ipaddrs.length; i++)
 							html += String.format(
-								'<strong><%:IPv4%>:</strong> %s/%d<br />',
-								ifc.ipaddrs[i].addr,
-								ifc.ipaddrs[i].prefix
+								'<strong><%:IPv4%>:</strong> %s<br />',
+								ifc.ipaddrs[i]
 							);
 					}
 
@@ -51,10 +50,14 @@
 					{
 						for (var i = 0; i < ifc.ip6addrs.length; i++)
 							html += String.format(
-								'<strong><%:IPv6%>:</strong> %s/%d<br />',
-								ifc.ip6addrs[i].addr,
-								ifc.ip6addrs[i].prefix
+								'<strong><%:IPv6%>:</strong> %s<br />',
+								ifc.ip6addrs[i]
 							);
+					}
+
+					if (ifc.ip6prefix)
+					{
+						html += String.format('<strong><%:IPv6-PD%>:</strong> %s<br />', ifc.ip6prefix);
 					}
 
 					d.innerHTML = html;
