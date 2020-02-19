@@ -189,6 +189,13 @@ cq.optional = true
 cq.datatype = "uinteger"
 cq.placeholder = 150
 
+cs = s:taboption("advanced", Value, "cachesize",
+	translate("Size of DNS query cache"),
+	translate("Number of cached DNS entries (max is 10000, 0 is no caching)"))
+cs.optional = true
+cs.datatype = "range(0,10000)"
+cs.placeholder = 512
+cs.default = "512"
 
 s:taboption("tftp", Flag, "enable_tftp",
 	translate("Enable TFTP server")).optional = true
