@@ -1,5 +1,5 @@
 -- Copyright 2008 Steven Barth <steven@midlink.org>
--- Copyright 2011 Jo-Philipp Wich <jow@openwrt.org>
+-- Copyright 2011-2015 Jo-Philipp Wich <jow@openwrt.org>
 -- Licensed to the public under the Apache License 2.0.
 
 module("luci.controller.admin.network", package.seeall)
@@ -61,7 +61,7 @@ function index()
 			page = entry({"admin", "network", "wireless_shutdown"}, call("wifi_shutdown"), nil)
 			page.leaf = true
 
-			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wifi"), 15)
+			page = entry({"admin", "network", "wireless"}, arcombine(template("admin_network/wifi_overview"), cbi("admin_network/wifi")), _("Wireless"), 15)
 			page.leaf = true
 			page.subindex = true
 
@@ -156,26 +156,15 @@ function index()
 end
 
 function wifi_join()
-	local function param(x)
-		return luci.http.formvalue(x)
-	end
-
-	local function ptable(x)
-		x = param(x)
-		return x and (type(x) ~= "table" and { x } or x) or {}
-	end
-
-	local dev  = param("device")
-	local ssid = param("join")
+	local tpl  = require "luci.template"
+	local http = require "luci.http"
+	local dev  = http.formvalue("device")
+	local ssid = http.formvalue("join")
 
 	if dev and ssid then
-		local cancel  = (param("cancel") or param("cbi.cancel")) and true or false
-
-		if cancel then
-			luci.http.redirect(luci.dispatcher.build_url("admin/network/wireless_join?device=" .. dev))
-		else
+		local cancel = (http.formvalue("cancel") or http.formvalue("cbi.cancel"))
+		if not cancel then
 			local cbi = require "luci.cbi"
-			local tpl = require "luci.template"
 			local map = luci.cbi.load("admin_network/wifi_add")[1]
 
 			if map:parse() ~= cbi.FORM_DONE then
@@ -183,10 +172,12 @@ function wifi_join()
 				map:render()
 				tpl.render("footer")
 			end
+
+			return
 		end
-	else
-		luci.template.render("admin_network/wifi_join")
 	end
+
+	tpl.render("admin_network/wifi_join")
 end
 
 function wifi_add()
@@ -244,7 +235,10 @@ function iface_status(ifaces)
 				proto      = net:proto(),
 				uptime     = net:uptime(),
 				gwaddr     = net:gwaddr(),
+				ipaddrs    = net:ipaddrs(),
+				ip6addrs   = net:ip6addrs(),
 				dnsaddrs   = net:dnsaddrs(),
+				ip6prefix  = net:ip6prefix(),
 				name       = device:shortname(),
 				type       = device:type(),
 				ifname     = device:name(),
@@ -255,28 +249,8 @@ function iface_status(ifaces)
 				rx_packets = device:rx_packets(),
 				tx_packets = device:tx_packets(),
 
-				ipaddrs    = { },
-				ip6addrs   = { },
 				subdevices = { }
 			}
-
-			local _, a
-			for _, a in ipairs(device:ipaddrs()) do
-				data.ipaddrs[#data.ipaddrs+1] = {
-					addr      = a:host():string(),
-					netmask   = a:mask():string(),
-					prefix    = a:prefix()
-				}
-			end
-			for _, a in ipairs(device:ip6addrs()) do
-				if not a:is6linklocal() then
-					data.ip6addrs[#data.ip6addrs+1] = {
-						addr      = a:host():string(),
-						netmask   = a:mask():string(),
-						prefix    = a:prefix()
-					}
-				end
-			end
 
 			for _, device in ipairs(net:get_interfaces() or {}) do
 				data.subdevices[#data.subdevices+1] = {
