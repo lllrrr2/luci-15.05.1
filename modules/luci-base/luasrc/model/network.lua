@@ -797,6 +797,20 @@ function protocol.ipaddr(self)
 	return addrs and #addrs > 0 and addrs[1].address
 end
 
+function protocol.ipaddrs(self)
+	local addrs = self:_ubus("ipv4-address")
+	local rv = { }
+
+	if type(addrs) == "table" then
+		local n, addr
+		for n, addr in ipairs(addrs) do
+			rv[#rv+1] = "%s/%d" %{ addr.address, addr.mask }
+		end
+	end
+
+	return rv
+end
+
 function protocol.netmask(self)
 	local addrs = self:_ubus("ipv4-address")
 	return addrs and #addrs > 0 and
@@ -833,6 +847,28 @@ function protocol.ip6addr(self)
 			return "%s/%d" %{ addrs[1].address, addrs[1].mask }
 		end
 	end
+end
+
+function protocol.ip6addrs(self)
+	local addrs = self:_ubus("ipv6-address")
+	local rv = { }
+	local n, addr
+
+	if type(addrs) == "table" then
+		for n, addr in ipairs(addrs) do
+			rv[#rv+1] = "%s/%d" %{ addr.address, addr.mask }
+		end
+	end
+
+	addrs = self:_ubus("ipv6-prefix-assignment")
+
+	if type(addrs) == "table" then
+		for n, addr in ipairs(addrs) do
+			rv[#rv+1] = "%s1/%d" %{ addr.address, addr.mask }
+		end
+	end
+
+	return rv
 end
 
 function protocol.gw6addr(self)
