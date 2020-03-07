@@ -127,6 +127,9 @@ msgstr "注意"
 msgid "Off"
 msgstr "关闭"
 
+msgid "Open AriaNg"
+msgstr "打开 AriaNg"
+
 msgid "Open WebUI-Aria2"
 msgstr "打开 WebUI-Aria2"
 
