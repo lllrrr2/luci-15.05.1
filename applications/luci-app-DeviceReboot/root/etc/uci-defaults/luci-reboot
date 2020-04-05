@@ -1,0 +1,10 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+        add ucitrack reboot
+        set ucitrack.@reboot[-1].init=reboot
+        commit ucitrack
+EOF
+
+rm -f /tmp/luci-indexcache
+exit 0

@@ -1,0 +1,45 @@
+msgid "Device Reboot"
+msgstr "设备重启"
+
+msgid "set a reboot timer"
+msgstr "定时重启"
+
+msgid "Reboot Timer"
+msgstr "定时重启"
+
+msgid "Enabled"
+msgstr "启用"
+
+msgid "Hour"
+msgstr "小时"
+
+msgid "Minutes"
+msgstr "分钟"
+
+msgid "Local Time"
+msgstr "本地时间"
+
+msgid "Period"
+msgstr "周期"
+
+msgid "Monday"
+msgstr "星期一"
+
+msgid "Tuesday"
+msgstr "星期二"
+
+msgid "Wedesday"
+msgstr "星期三"
+
+msgid "Thursday"
+msgstr "星期四"
+
+msgid "Friday"
+msgstr "星期五"
+
+msgid "Saturday"
+msgstr "星期六"
+
+msgid "Sunday"
+msgstr "星期日"
+

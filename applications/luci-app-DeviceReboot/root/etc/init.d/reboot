@@ -1,0 +1,74 @@
+#!/bin/sh /etc/rc.common
+
+START=70
+STOP=70
+
+CRONFILE="/etc/crontabs/root"
+
+rebootTimer()
+{
+	local enabled
+	local hour
+	local min
+	local period
+	
+	config_get_bool enabled $1 enabled 0
+	[ "$enabled" -eq 0 ] && return 1
+
+	config_get hour 	$1 hour
+	config_get min 		$1 min
+	config_get period	$1 period
+
+	local period2="*"
+
+	p_begin=`echo $period | awk '{print $1}'`
+	p_end=`echo $period | awk '{print $NF}'`
+
+	if [ -n "$period" ]; then
+		p_num=`echo $period | tr " " "\n" | wc -l`
+		p_design=`seq $p_begin $p_end | wc -l`
+
+		if [ "$p_num" -eq 7 ]; then
+			echo "Everyday"
+		elif [ "$p_num" == 1 ]; then
+			period2=$p_begin
+		else
+			if [ "$p_num" == "$p_design" ]; then
+				period2=$p_begin"-"$p_end
+			else
+				period2=`echo $period | tr " " ","`
+			fi
+		fi
+
+		echo "$min $hour * * $period2 /sbin/reboot" >> $CRONFILE
+	else
+	    echo "$min $hour * * $period2 /sbin/reboot" >> $CRONFILE
+	fi
+	PID=`pidof crond`
+	if [ -z "$PID" ]; then
+	    /usr/sbin/crond -c /etc/crontabs -l 8
+	fi
+}
+
+start()
+{
+	config_load reboot
+	config_foreach rebootTimer reboot
+}
+
+stop()
+{
+	sed -i '/reboot/d' $CRONFILE
+}
+
+restart()
+{
+	stop
+	sleep 2
+	start
+}
+
+reload()
+{
+	restart
+}
