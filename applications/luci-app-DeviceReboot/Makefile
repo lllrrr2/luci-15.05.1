@@ -9,7 +9,7 @@ LUCI_TITLE:=luci-app-DeviceReboot
 LUCI_PKGARCH:=all
 PKG_RELEASE:=201200328
 
-include ../../luci.mkuci/luci.mk
+include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
 
