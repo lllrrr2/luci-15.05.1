@@ -1,4 +1,4 @@
-<script type="text/javascript">/
+<script type="text/javascript">//<![CDATA[
 XHR.poll(3, '<%=luci.dispatcher.build_url("admin", "vpn", "zerotier", "status")%>', null,
 	function(x, data) {
 		var tb = document.getElementById('zerotier_status');
@@ -12,6 +12,7 @@ XHR.poll(3, '<%=luci.dispatcher.build_url("admin", "vpn", "zerotier", "status")%
 		}
 	}
 );
+//]]>
 </script>
 <style>.mar-10 {margin-left: 50px; margin-right: 10px;}</style>
 <fieldset class="cbi-section">
