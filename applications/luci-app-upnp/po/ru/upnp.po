@@ -124,8 +124,8 @@ msgstr "Запустить службы<br />UPnP и NAT-PMP"
 msgid "There are no active redirects."
 msgstr "Активные переадресации отсутствуют."
 
-msgid "UPNP"
-msgstr ""
+msgid "UPnP"
+msgstr "UPnP"
 
 msgid ""
 "UPnP allows clients in the local network to automatically configure the "
@@ -144,13 +144,10 @@ msgid "Uplink"
 msgstr "Внешнее соединение"
 
 msgid "Value in KByte/s, informational only"
-msgstr "Значение в КБ/с, только для информации"
+msgstr "Значение в КБ/с, только для информации."
 
 #~ msgid "Delete"
 #~ msgstr "Удалить"
 
 #~ msgid "Description"
 #~ msgstr "Описание"
-
-#~ msgid "UPnP"
-#~ msgstr "UPnP"
