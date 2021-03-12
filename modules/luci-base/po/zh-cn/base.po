@@ -621,6 +621,12 @@ msgstr "DNS"
 msgid "DNS forwardings"
 msgstr "DNS转发"
 
+msgid "Force Domain to IP"
+msgstr "强制域名跳转到IP(可屏蔽广告)"
+
+msgid "List of domains to force to an IP address"
+msgstr "强制跳转到IP地址的域名列表"
+
 msgid "DNS-Label / FQDN"
 msgstr ""
 

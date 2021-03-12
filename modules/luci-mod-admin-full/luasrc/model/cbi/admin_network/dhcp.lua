@@ -120,6 +120,13 @@ df.optional = true
 df.placeholder = "/example.org/10.1.2.3"
 
 
+dfi = s:taboption("general", DynamicList, "address", translate("Force Domain to IP"),
+	translate("List of domains to force to an IP address"))
+
+dfi.optional = true
+dfi.placeholder = "/router.local/192.168.0.1"
+
+
 rp = s:taboption("general", Flag, "rebind_protection",
 	translate("Rebind protection"),
 	translate("Discard upstream RFC1918 responses"))
