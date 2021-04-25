@@ -17,6 +17,7 @@ s:tab("general", translate("General Settings"))
 s:tab("files", translate("Resolv and Hosts Files"))
 s:tab("tftp", translate("TFTP Settings"))
 s:tab("advanced", translate("Advanced Settings"))
+s:tab("forsetiptv", translate("Dnsmasq for IPTV"))
 
 s:taboption("general", Flag, "domainneeded",
 	translate("Domain required"),
@@ -224,6 +225,18 @@ db.optional = true
 db:depends("enable_tftp", "1")
 db.placeholder = "pxelinux.0"
 
+
+local ipvsetdnsmasq = "/etc/dnsmasq.conf"
+local IPTVSETNXFS = require "nixio.fs"
+o = s:taboption("forsetiptv", TextValue, "ipvsetdnsmasq")
+o.rows = 12
+o.wrap = "off"
+o.cfgvalue = function(self, section)
+	return IPTVSETNXFS.readfile(ipvsetdnsmasq) or ""
+end
+o.write = function(self, section, value)
+	IPTVSETNXFS.writefile(ipvsetdnsmasq, value:gsub("\r\n", "\n"))
+end
 
 m:section(SimpleSection).template = "admin_network/lease_status"
 
