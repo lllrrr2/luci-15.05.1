@@ -263,6 +263,15 @@ mac.rmempty  = true
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ip.datatype = "or(ip4addr,'ignore')"
 
+leasetime = s:option(Value, "leasetime", translate("Lease time"))
+leasetime.rmempty = true
+leasetime.placeholder = "12h"
+
+duid = s:option(Value, "duid", translate("<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"))
+duid.rmempty = true
+duid.datatype = "and(hexstring,rangelength(20,36))"
+duid.description = translate("value between 20 and 36 characters")
+
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
 
 ipc.neighbors({ family = 4 }, function(n)
