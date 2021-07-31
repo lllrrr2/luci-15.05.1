@@ -102,7 +102,7 @@ function m.parse(map)
 	Map.parse(map)
 
 	if m:get(wdev:name(), "type") == "mac80211" and new_cc and new_cc ~= old_cc then
-		luci.sys.call("iw reg set %s" % ut.shellquote(new_cc))
+		luci.sys.call("iw reg set %q" % new_cc)
 
 		local old_ch = tonumber(m:formvalue("cbid.wireless.%s._mode_freq.channel" % wdev:name()) or "")
 		if old_ch then
