@@ -2353,6 +2353,27 @@ msgstr "对不起，请求的目标未找到。"
 msgid "Sorry, the server encountered an unexpected error."
 msgstr "对不起，服务器遇到未知错误。"
 
+msgid "Time interval for rekeying GTK"
+msgstr "重新加密 GTK 的时间间隔"
+
+msgid "sec"
+msgstr "秒"
+
+msgid "Disable Inactivity Polling"
+msgstr "禁用不活动轮询"
+
+msgid "Station inactivity limit"
+msgstr "非活动站点限制"
+
+msgid "Maximum allowed Listen Interval"
+msgstr "允许的最大监听间隔"
+
+msgid "Disassociate On Low Acknowledgement"
+msgstr "在低 Ack 应答时断开连接"
+
+msgid "Allow AP mode to disconnect STAs based on low ACK condition"
+msgstr "允许 AP 模式时在低 ACK 应答的情况下断开无线终端"
+
 #, fuzzy
 msgid ""
 "Sorry, there is no sysupgrade support present; a new firmware image must be "
