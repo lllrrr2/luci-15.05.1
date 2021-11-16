@@ -34,8 +34,8 @@ config server
 config server
 	option enabled '1'
 	option type 'udp'
-	option name 'google'
-	option ip '8.8.8.8'
+	option name 'dnspod'
+	option ip '119.29.29.29'
 	option port '53'
 
 config server
