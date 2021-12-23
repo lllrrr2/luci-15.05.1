@@ -27,7 +27,7 @@ e=t:option(Button, "zeroinit", translate("Initialization for network"))
 e.rmempty = true
 e.inputstyle = "apply"
 function e.write(self, section)
-	luci.util.exec("rm -rf /etc/zerotier /etc/zerotier.* /etc/config/zero >/dev/null 2>&1 &")
+	luci.util.exec("rm -rf /etc/zerotier /etc/config/zero >/dev/null 2>&1 &")
 end
 e.description = translate("When you need to join a new network, please initialize first")
 
