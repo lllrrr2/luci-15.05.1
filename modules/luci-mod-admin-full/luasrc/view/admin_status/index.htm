@@ -384,7 +384,7 @@
 										return String.format('<img src="<%=resource%>/icons/devices/mi.png" />')
 									else if (devmac == "00:5b:94" || devmac == "34:a8:eb" | devmac == "64:20:0c" | devmac == "7a:51:e7" || devmac == "80:be:05" || devmac == "ae:0b:09"  || devmac == "b8:c1:11"  || devmac == "dc:a9:04")
 										return String.format('<img src="<%=resource%>/icons/devices/apple.png" />')
-									else if (devmac == "02:5f:84" || devmac == "02:f8:ea" || devmac == "12:65:e3" || devmac == "18:3c:b7" || devmac == "30:a2:c2" || devmac == "32:bc:0e" || devmac == "3c:cd:5d" || devmac == "7c:a1:77" || devmac == "82:51:80" || devmac == "82:a0:d3" || devmac == "82:a5:6b" || devmac == "90:2b:d2" || devmac == "96:c9:cb" || devmac == "9c:b2:b2" || devmac == "a8:e5:44" || devmac == "b2:3d:8c" || devmac == "c2:56:e7" || devmac == "c2:d0:55" || devmac == "d2:7e:7b"  || devmac == "f2:49:84")
+									else if (devmac == "02:5f:84" || devmac == "02:f8:ea" || devmac == "12:65:e3" || devmac == "18:3c:b7" || devmac == "22:df:c6" || devmac == "30:a2:c2" || devmac == "32:bc:0e" || devmac == "3c:cd:5d" || devmac == "7c:a1:77" || devmac == "82:51:80" || devmac == "82:a0:d3" || devmac == "82:a5:6b" || devmac == "82:ef:22" || devmac == "90:2b:d2" || devmac == "96:c9:cb" || devmac == "9c:b2:b2" || devmac == "a8:e5:44" || devmac == "b2:3d:8c" || devmac == "c2:56:e7" || devmac == "c2:98:4b" || devmac == "c2:d0:55" || devmac == "d2:7e:7b"  || devmac == "f2:49:84")
 										return String.format('<img src="<%=resource%>/icons/devices/huawei.png" />')
 									else if (devmac == "e4:a7:c5")
 										return String.format('<img src="<%=resource%>/icons/devices/honor.png" />')
@@ -394,6 +394,8 @@
 										return String.format('<img src="<%=resource%>/icons/devices/realme.png" />')
 									else if (devmac == "2a:da:93")
 										return String.format('<img src="<%=resource%>/icons/devices/vivo.png" />')
+									else if (devmac == "ac:38:70")
+										return String.format('<img src="<%=resource%>/icons/devices/lenovo.png" />')
 									else if (devmac == "02:81:eb")
 										return String.format('<img src="<%=resource%>/icons/devices/orangepi.png" />')
 									else if (devmac == "00:22:5f")
@@ -406,7 +408,7 @@
 										return String.format('<img src="<%=resource%>/icons/devices/tmall.png" />')
 									else if (devmac == "e0:76:d0")
 										return String.format('<img src="<%=resource%>/icons/devices/xiaotiancai.png" />')
-									else if (devmac == "04:5f:a7" || devmac == "20:76:93" || devmac == "38:83:45" || devmac == "78:a3:51" || devmac == "78:d3:8d" || devmac == "cc:08:fb" || devmac == "d4:ee:07" || devmac == "dc:d8:7c")
+									else if (devmac == "04:5f:a7" || devmac == "20:76:93" || devmac == "38:83:45" || devmac == "78:a3:51" || devmac == "78:d3:8d" || devmac == "88:c3:97" || devmac == "cc:08:fb" || devmac == "d4:ee:07" || devmac == "dc:d8:7c")
 										return String.format('<img src="<%=resource%>/icons/devices/router.png" />')
 									else if (devmac == "9c:ae:d3")
 										return String.format('<img src="<%=resource%>/icons/devices/printer.png" />')
@@ -432,7 +434,7 @@
 						tr.className = 'cbi-section-table-row';
 
 					var td = tr.insertCell(-1);
-						td.colSpan = 4;
+						td.colSpan = 5;
 						td.innerHTML = '<em><br /><%:There are no active leases.%></em>';
 				}
 			}
@@ -630,7 +632,7 @@
 							return String.format('<img src="<%=resource%>/icons/devices/mi.png" />')
 						else if (devmac == "00:5b:94" || devmac == "34:a8:eb" | devmac == "64:20:0c" | devmac == "7a:51:e7" || devmac == "80:be:05" || devmac == "ae:0b:09"  || devmac == "b8:c1:11"  || devmac == "dc:a9:04")
 							return String.format('<img src="<%=resource%>/icons/devices/apple.png" />')
-						else if (devmac == "02:5f:84" || devmac == "02:f8:ea" || devmac == "12:65:e3" || devmac == "18:3c:b7" || devmac == "30:a2:c2" || devmac == "32:bc:0e" || devmac == "3c:cd:5d" || devmac == "7c:a1:77" || devmac == "82:51:80" || devmac == "82:a0:d3" || devmac == "82:a5:6b" || devmac == "90:2b:d2" || devmac == "96:c9:cb" || devmac == "9c:b2:b2" || devmac == "a8:e5:44" || devmac == "b2:3d:8c" || devmac == "c2:56:e7" || devmac == "c2:d0:55" || devmac == "d2:7e:7b"  || devmac == "f2:49:84")
+						else if (devmac == "02:5f:84" || devmac == "02:f8:ea" || devmac == "12:65:e3" || devmac == "18:3c:b7" || devmac == "22:df:c6" || devmac == "30:a2:c2" || devmac == "32:bc:0e" || devmac == "3c:cd:5d" || devmac == "7c:a1:77" || devmac == "82:51:80" || devmac == "82:a0:d3" || devmac == "82:a5:6b" || devmac == "82:ef:22" || devmac == "90:2b:d2" || devmac == "96:c9:cb" || devmac == "9c:b2:b2" || devmac == "a8:e5:44" || devmac == "b2:3d:8c" || devmac == "c2:56:e7" || devmac == "c2:98:4b" || devmac == "c2:d0:55" || devmac == "d2:7e:7b"  || devmac == "f2:49:84")
 							return String.format('<img src="<%=resource%>/icons/devices/huawei.png" />')
 						else if (devmac == "e4:a7:c5")
 							return String.format('<img src="<%=resource%>/icons/devices/honor.png" />')
@@ -640,6 +642,8 @@
 							return String.format('<img src="<%=resource%>/icons/devices/realme.png" />')
 						else if (devmac == "2a:da:93")
 							return String.format('<img src="<%=resource%>/icons/devices/vivo.png" />')
+						else if (devmac == "ac:38:70")
+							return String.format('<img src="<%=resource%>/icons/devices/lenovo.png" />')
 						else if (devmac == "02:81:eb")
 							return String.format('<img src="<%=resource%>/icons/devices/orangepi.png" />')
 						else if (devmac == "00:22:5f")
@@ -652,7 +656,7 @@
 							return String.format('<img src="<%=resource%>/icons/devices/tmall.png" />')
 						else if (devmac == "e0:76:d0")
 							return String.format('<img src="<%=resource%>/icons/devices/xiaotiancai.png" />')
-						else if (devmac == "04:5f:a7" || devmac == "20:76:93" || devmac == "38:83:45" || devmac == "78:a3:51" || devmac == "78:d3:8d" || devmac == "cc:08:fb" || devmac == "d4:ee:07" || devmac == "dc:d8:7c")
+						else if (devmac == "04:5f:a7" || devmac == "20:76:93" || devmac == "38:83:45" || devmac == "78:a3:51" || devmac == "78:d3:8d" || devmac == "88:c3:97" || devmac == "cc:08:fb" || devmac == "d4:ee:07" || devmac == "dc:d8:7c")
 							return String.format('<img src="<%=resource%>/icons/devices/router.png" />')
 						else if (devmac == "9c:ae:d3")
 							return String.format('<img src="<%=resource%>/icons/devices/printer.png" />')
