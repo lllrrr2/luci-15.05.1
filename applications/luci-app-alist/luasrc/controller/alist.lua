@@ -13,12 +13,12 @@ function alist_status()
 	local uci  = require "luci.model.uci".cursor()
 	local port = tonumber(uci:get_first("alist", "alist", "port"))
 	local rpassword
-	local password = io.popen("logread | grep alist | grep password | grep -v local | awk '{print $12}'")
+	local password = io.popen("logread | grep alist | grep password | grep -v local | tail -n 1 | awk '{print $12}'")
 
 	local status = {
 		running = (sys.call("pidof alist >/dev/null") == 0),
 		port = (port or 5244),
-		rpassword = string.gsub(string.gsub(password:read("*a"),"\n$", ""), "\n",  "或")	
+		rpassword = string.gsub(password:read("*a"), "\n",  "")	
 	}
 
 	luci.http.prepare_content("application/json")
