@@ -4,8 +4,8 @@ function index()
 	if not nixio.fs.access("/etc/config/alist") then
 		return
 	end
-	entry({"admin", "nas", "alist"}, cbi("alist"), _("Alist"), 20).dependent = true
-	entry({"admin", "nas", "alist_status"}, call("alist_status"))
+	entry({"admin", "services", "alist"}, cbi("alist"), _("Alist"), 20).dependent = true
+	entry({"admin", "services", "alist_status"}, call("alist_status"))
 end
 
 function alist_status()
