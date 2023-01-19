@@ -971,12 +971,12 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 
 
 	wnmsleepmode = s:taboption("encryption", Flag, "wnm_sleep_mode", translate("extended sleep mode for stations"))
-	wnmsleepmode.default = wnmsleepmode.disabled
+	wnmsleepmode.default = wnmsleepmode.enabled
 	wnmsleepmode:depends({ieee80211v="1"})
 	wnmsleepmode.rmempty = true
 
 	bsstransition = s:taboption("encryption", Flag, "bss_transition", translate("BSS Transition Management"))
-	bsstransition.default = bsstransition.disabled
+	bsstransition.default = bsstransition.enabled
 	bsstransition:depends({ieee80211v="1"})
 	bsstransition.rmempty = true
 
