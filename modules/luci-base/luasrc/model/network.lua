@@ -239,7 +239,7 @@ function init(cursor)
 
 	-- read bridge informaton
 	local b, l
-	for l in utl.execi("brctl show") do
+	for l in utl.execi("brctl show 2>/dev/null") do
 		if not l:match("STP") then
 			local r = utl.split(l, "%s+", nil, true)
 			if #r == 4 then
