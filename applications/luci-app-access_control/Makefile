@@ -1,16 +1,17 @@
-#
-# Copyright (C) 2018 By-Ameng Openwrt.org
+
+# Copyright (C) 2016 Openwrt.org
 #
 # This is free software, licensed under the Apache License, Version 2.0 .
 #
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=luci-app-access_control
+LUCI_TITLE:=LuCI Access Control Configuration
 LUCI_DEPENDS:=
 LUCI_PKGARCH:=all
-PKG_VERSION:=1.0
-PKG_RELEASE:=1
+PKG_NAME:=luci-app-accesscontrol
+PKG_VERSION:=1
+PKG_RELEASE:=11
 
 include ../../luci.mk
 
