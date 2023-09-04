@@ -1,17 +1,14 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: luci-app-ddns 2.4.0-1\n"
-"POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2021-01-15 22:31+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <https://hosted.weblate.org/projects/openwrt/"
-"luciapplicationsddns/he/>\n"
-"Language: he\n"
-"MIME-Version: 1.0\n"
+"PO-Revision-Date: 2022-03-26 23:10+0000\n"
+"Last-Translator: dikastia <dikastia@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsddns/ko/>\n"
+"Language: ko\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.5-dev\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:145
 msgid "&"
@@ -29,7 +26,7 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:53
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:264
 msgid "Advanced Settings"
-msgstr "הגדרות מתקדמות"
+msgstr "고급 설정"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:46
 msgid "Allow non-public IP's"
@@ -43,7 +40,7 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:50
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:263
 msgid "Basic Settings"
-msgstr ""
+msgstr "기본 설정"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:25
 msgid ""
@@ -103,7 +100,7 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:102
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:48
 msgid "Configuration"
-msgstr "הגדרות"
+msgstr "설정"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/global.lua:27
 msgid ""
@@ -138,9 +135,8 @@ msgid "Custom update script to be used for updating your DDNS Provider."
 msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:412
-#, fuzzy
 msgid "Custom update-URL"
-msgstr "עדכן URL באופן ידני"
+msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:451
 msgid "Custom update-script"
@@ -241,15 +237,13 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:52
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:44
 msgid "Dynamic DNS"
-msgstr "DNS דינאמי"
+msgstr ""
 
 #: applications/luci-app-ddns/luasrc/controller/ddns.lua:65
 msgid ""
 "Dynamic DNS allows that your router can be reached with a fixed hostname "
 "while having a dynamically changing IP address."
 msgstr ""
-"שירות DDNS מאפשר גישה לנתב שלך ע\"י שם דומיין קבוע, בעוד כתובת ה- IP שלך "
-"משתנה באופן דינמי."
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:609
 msgid "Enable secure communication with DDNS provider"
@@ -258,11 +252,11 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:271
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:153
 msgid "Enabled"
-msgstr ""
+msgstr "활성화"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1286
 msgid "Error"
-msgstr ""
+msgstr "에러"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1425
 msgid "Error Retry Counter"
@@ -424,7 +418,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1283
 msgid "Info"
-msgstr ""
+msgstr "정보"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:162
 msgid ""
@@ -436,7 +430,7 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:716
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:941
 msgid "Interface"
-msgstr "מנשק"
+msgstr "인터페이스"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1334
 msgid ""
@@ -511,7 +505,7 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:802
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:52
 msgid "Network"
-msgstr "רשת"
+msgstr "네트워크"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1020
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1066
@@ -520,7 +514,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/view/ddns/overview_status.htm:45
 msgid "Never"
-msgstr "אף פעם"
+msgstr "안함"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/overview.lua:159
 #: applications/luci-app-ddns/luasrc/view/ddns/system_status.htm:49
@@ -615,7 +609,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:502
 msgid "Password"
-msgstr "סיסמא"
+msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:630
 msgid "Path to CA-Certificate"
@@ -739,7 +733,7 @@ msgstr ""
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:665
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:715
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:845
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:890
@@ -771,7 +765,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:491
 msgid "Username"
-msgstr "שם משתמש"
+msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/hints.lua:145
 msgid "Using specific DNS Server not supported"
@@ -799,7 +793,7 @@ msgstr ""
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1285
 msgid "Warning"
-msgstr ""
+msgstr "경고"
 
 #: applications/luci-app-ddns/luasrc/model/cbi/ddns/detail.lua:1294
 msgid ""

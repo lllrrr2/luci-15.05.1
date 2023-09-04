@@ -1,21 +1,23 @@
--- Copyright 2014-2017 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
+-- Copyright 2014-2018 Christian Schoenebeck <christian dot schoenebeck at gmail dot com>
 -- Licensed to the public under the Apache License 2.0.
 
-local NXFS = require "nixio.fs"
-local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DISP = require "luci.dispatcher"
 local HTTP = require "luci.http"
 local SYS  = require "luci.sys"
+local CTRL = require "luci.controller.ddns"	-- this application's controller
 local DDNS = require "luci.tools.ddns"		-- ddns multiused functions
 
--- show hints ?
-show_hints = not (DDNS.check_ipv6()		-- IPv6 support
-		and DDNS.check_ssl()		-- HTTPS support
-		and DDNS.check_proxy()		-- Proxy support
-		and DDNS.check_bind_host()	-- DNS TCP support
+local show_hints = not (DDNS.env_info("has_ipv6")		-- IPv6 support
+				   and  DDNS.env_info("has_ssl")		-- HTTPS support
+				   and  DDNS.env_info("has_proxy")		-- Proxy support
+				   and  DDNS.env_info("has_bindhost")	-- DNS TCP support
+				   and  DDNS.env_info("has_forceip")	-- Force IP version
+				   and  DDNS.env_info("has_dnsserver")	-- DNS server support
+				   and  DDNS.env_info("has_bindnet")	-- Bind to network/interface
+				   and  DDNS.env_info("has_cacerts")	-- certificates installed at /etc/ssl/certs
 		)
--- correct ddns-scripts version
-need_update = DDNS.ipkg_ver_compare(DDNS.ipkg_ver_installed("ddns-scripts"), "<<", CTRL.DDNS_MIN)
+local not_enabled = not SYS.init.enabled("ddns")
+local need_update = not CTRL.service_ok()
 
 -- html constants
 font_red = [[<font color="red">]]
@@ -25,23 +27,8 @@ bold_off = [[</strong>]]
 
 -- cbi-map definition -- #######################################################
 m = Map("ddns")
-
--- first need to close <a> from cbi map template our <a> closed by template
-m.title	= [[</a><a href="javascript:alert(']]
-		.. translate("Version Information")
-		.. [[\n\nluci-app-ddns]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("luci-app-ddns")
-		.. [[\n\nddns-scripts ]] .. translate("required") .. [[:]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. CTRL.DDNS_MIN .. [[ ]] .. translate("or higher")
-		.. [[\n\nddns-scripts ]] .. translate("installed") .. [[:]]
-		.. [[\n\t]] .. translate("Version") .. [[:\t]] .. DDNS.ipkg_ver_installed("ddns-scripts")
-		.. [[\n\n]]
-	.. [[')">]]
-	.. translate("Dynamic DNS")
-
-m.description = translate("Dynamic DNS allows that your router can be reached with " ..
-			"a fixed hostname while having a dynamically changing " ..
-			"IP address.")
+m.title		= CTRL.app_title_main()
+m.description	= CTRL.app_description()
 
 m.on_after_commit = function(self)
 	if self.changed then	-- changes ?
@@ -56,23 +43,18 @@ m.on_after_commit = function(self)
 	end
 end
 
--- SimpleSection definiton -- ##################################################
+-- SimpleSection definition -- ##################################################
 -- with all the JavaScripts we need for "a good Show"
 a = m:section( SimpleSection )
 a.template = "ddns/overview_status"
 
 -- SimpleSection definition -- #################################################
 -- show Hints to optimize installation and script usage
--- only show if 	service not enabled
---		or	no IPv6 support
---		or	not GNU Wget and not cURL	(for https support)
---		or	not GNU Wget but cURL without proxy support
---		or	not BIND's host
---		or	ddns-scripts package need update
-if show_hints or need_update or not SYS.init.enabled("ddns") then
+if show_hints or need_update or not_enabled then
+
 	s = m:section( SimpleSection, translate("Hints") )
 
-	-- ddns_scripts needs to be updated for full functionality
+	-- ddns-scripts needs to be updated for full functionality
 	if need_update then
 		local dv = s:option(DummyValue, "_update_needed")
 		dv.titleref = DISP.build_url("admin", "system", "packages")
@@ -85,7 +67,7 @@ if show_hints or need_update or not SYS.init.enabled("ddns") then
 	end
 
 	-- DDNS Service disabled
-	if not SYS.init.enabled("ddns") then
+	if not_enabled then
 		local dv = s:option(DummyValue, "_not_enabled")
 		dv.titleref = DISP.build_url("admin", "system", "startup")
 		dv.rawhtml  = true
@@ -110,11 +92,11 @@ end
 -- TableSection definition -- ##################################################
 ts = m:section( TypedSection, "service",
 	translate("Overview"),
-	translate("Below is a list of configured DDNS configurations and their current state.") 
-	.. "<br />" 
-	.. translate("If you want to send updates for IPv4 and IPv6 you need to define two separate Configurations " 
-		.. "i.e. 'myddns_ipv4' and 'myddns_ipv6'") 
-	.. "<br />" 
+	translate("Below is a list of configured DDNS configurations and their current state.")
+	.. "<br />"
+	.. translate("If you want to send updates for IPv4 and IPv6 you need to define two separate Configurations "
+		.. "i.e. 'myddns_ipv4' and 'myddns_ipv6'")
+	.. "<br />"
 	.. [[<a href="]] .. DISP.build_url("admin", "services", "ddns", "global") .. [[">]]
 	.. translate("To change global settings click here") .. [[</a>]] )
 ts.sectionhead = translate("Configuration")
@@ -139,22 +121,29 @@ function dom.set_one(self, section)
 	end
 end
 function dom.set_two(self, section)
-	local lookup_host = self.map:get(section, "lookup_host") or ""
-	if lookup_host == "" then return "" end
-	local dnsserver = self.map:get(section, "dnsserver") or ""
-	local use_ipv6 = tonumber(self.map:get(section, "use_ipv6") or 0)
-	local force_ipversion = tonumber(self.map:get(section, "force_ipversion") or 0)
-	local force_dnstcp = tonumber(self.map:get(section, "force_dnstcp") or 0)
-	local is_glue = tonumber(self.map:get(section, "is_glue") or 0)
-	local command = CTRL.luci_helper .. [[ -]]
-	if (use_ipv6 == 1) then command = command .. [[6]] end
-	if (force_ipversion == 1) then command = command .. [[f]] end
-	if (force_dnstcp == 1) then command = command .. [[t]] end
-	if (is_glue == 1) then command = command .. [[g]] end
-	command = command .. [[l ]] .. lookup_host
-	if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
-	command = command .. [[ -- get_registered_ip]]
-	local ip = SYS.exec(command)
+	local chk_sec  = DDNS.calc_seconds(
+				tonumber(self.map:get(section, "check_interval")) or 10,
+				self.map:get(section, "check_unit") or "minutes" )
+	local ip = DDNS.get_regip(section, chk_sec)
+	if ip == "NOFILE" then
+		local lookup_host = self.map:get(section, "lookup_host") or ""
+		if lookup_host == "" then return "" end
+		local dnsserver = self.map:get(section, "dnsserver") or ""
+		local use_ipv6 = tonumber(self.map:get(section, "use_ipv6") or 0)
+		local force_ipversion = tonumber(self.map:get(section, "force_ipversion") or 0)
+		local force_dnstcp = tonumber(self.map:get(section, "force_dnstcp") or 0)
+		local is_glue = tonumber(self.map:get(section, "is_glue") or 0)
+		local command = CTRL.luci_helper .. [[ -]]
+		if (use_ipv6 == 1) then command = command .. [[6]] end
+		if (force_ipversion == 1) then command = command .. [[f]] end
+		if (force_dnstcp == 1) then command = command .. [[t]] end
+		if (is_glue == 1) then command = command .. [[g]] end
+		command = command .. [[l ]] .. lookup_host
+		command = command .. [[ -S ]] .. section
+		if (#dnsserver > 0) then command = command .. [[ -d ]] .. dnsserver end
+		command = command .. [[ -- get_registered_ip]]
+		ip = SYS.exec(command)
+	end
 	if ip == "" then ip = translate("no data") end
 	return ip
 end
@@ -164,9 +153,6 @@ ena = ts:option( Flag, "enabled",
 	translate("Enabled"))
 ena.template = "ddns/overview_enabled"
 ena.rmempty = false
-function ena.parse(self, section)
-	DDNS.flag_parse(self, section)
-end
 
 -- show PID and next update
 upd = ts:option( DummyValue, "_update",
