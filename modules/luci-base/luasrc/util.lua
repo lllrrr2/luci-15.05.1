@@ -150,6 +150,10 @@ function striptags(value)
 	return value and tparser.striptags(tostring(value))
 end
 
+function shellquote(value)
+	return string.format("'%s'", string.gsub(value or "", "'", "'\\''"))
+end
+
 -- containing the resulting substrings. The optional max parameter specifies
 -- the number of bytes to process, regardless of the actual length of the given
 -- string. The optional last parameter, regex, specifies whether the separator
