@@ -1,5 +1,11 @@
 #!/bin/sh
 
+uci set network.zerotier="interface"
+uci set network.zerotier.ifname="zerotier"
+uci set network.zerotier.proto="none"
+uci commit network;
+/etc/init.d/network reload
+
 uci -q batch <<-EOF >/dev/null
 	delete ucitrack.@zerotier[-1]
 	add ucitrack zerotier
