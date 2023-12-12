@@ -40,8 +40,8 @@ config server
 
 config server
 	option enabled '1'
-	option type 'udp'
-	option name '114'
-	option ip '114.114.114.114'
+	option name 'baidu'
+	option ip '180.76.76.76'
 	option port '53'
+	option type 'udp'
 

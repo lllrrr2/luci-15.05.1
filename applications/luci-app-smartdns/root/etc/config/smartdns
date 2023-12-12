@@ -4,7 +4,7 @@ config smartdns
 	option port '6053'
 	option tcp_server '1'
 	option prefetch_domain '1'
-	option serve_expired '1'
+	option serve_expired '0'
 	option rr_ttl_min '300'
 	option seconddns_port '7053'
 	option seconddns_tcp_server '1'
@@ -27,22 +27,25 @@ config smartdns
 
 config server
 	option enabled '1'
-	option type 'udp'
 	option name 'alibaba'
 	option ip '223.5.5.5'
 	option port '53'
+	option type 'udp'
+	option server_group 'home'
 
 config server
 	option enabled '1'
-	option type 'udp'
 	option name 'dnspod'
 	option ip '119.29.29.29'
 	option port '53'
+	option type 'udp'
+	option server_group 'home'
 
 config server
 	option enabled '1'
-	option type 'udp'
-	option name '114'
-	option ip '114.114.114.114'
+	option name 'baidu'
+	option ip '180.76.76.76'
 	option port '53'
+	option type 'udp'
+	option server_group 'home'
 
