@@ -206,6 +206,49 @@ var cbi_validators = {
 			cbi_validators.host.apply(this);
 	},
 
+	'hostport': function()
+	{
+		var hp = this.split(/:/);
+
+		if (hp.length == 2)
+			return (cbi_validators.host.apply(hp[0]) &&
+			        cbi_validators.port.apply(hp[1]));
+
+		return false;
+	},
+
+	'ip4addrport': function()
+	{
+		var hp = this.split(/:/);
+
+		if (hp.length == 2)
+			return (cbi_validators.ipaddr.apply(hp[0]) &&
+			        cbi_validators.port.apply(hp[1]));
+		return false;
+	},
+
+	'ipaddrport': function(bracket)
+	{
+		if (this.match(/^([^\[\]:]+):([^:]+)$/)) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip4addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+                } else if ((bracket == 1) && (this.match(/^\[(.+)\]:([^:]+)$/))) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip6addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+                } else if ((bracket != 1) && (this.match(/^([^\[\]]+):([^:]+)$/))) {
+			var addr = RegExp.$1
+			var port = RegExp.$2
+			return (cbi_validators.ip6addr.apply(addr) &&
+				cbi_validators.port.apply(port));
+		} else {
+			return false;
+		}
+	},
+
 	'wpakey': function()
 	{
 		var v = this;
