@@ -3264,6 +3264,12 @@ msgstr "是"
 msgid "« Back"
 msgstr "« 后退"
 
+msgid "Exclude interfaces"
+msgstr "排除接口"
+
+msgid "Prevent listening on these interfaces."
+msgstr "不监听这些接口。"
+
 #~ msgid "CPU frequency"
 #~ msgstr "CPU 频率"
 

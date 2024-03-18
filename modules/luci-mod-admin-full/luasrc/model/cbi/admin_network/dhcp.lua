@@ -151,6 +151,11 @@ rd.datatype = "host"
 rd.placeholder = "ihost.netflix.com"
 
 
+ei = s:taboption("general", DynamicList, "notinterface", translate("Exclude interfaces"),
+	translate("Prevent listening on these interfaces."))
+ei.optional = true
+
+
 pt = s:taboption("advanced", Value, "port",
 	translate("<abbr title=\"Domain Name System\">DNS</abbr> server port"),
 	translate("Listening port for inbound DNS queries"))
