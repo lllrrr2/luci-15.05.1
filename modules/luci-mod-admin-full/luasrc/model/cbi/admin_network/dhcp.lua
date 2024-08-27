@@ -272,6 +272,9 @@ leasetime = s:option(Value, "leasetime", translate("Lease time"))
 leasetime.rmempty = true
 leasetime.placeholder = "12h"
 
+tag = s:option(Value, "tag", translate("Tag name"))
+tag.rmempty = true
+
 duid = s:option(Value, "duid", translate("<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"))
 duid.rmempty = true
 duid.datatype = "and(hexstring,rangelength(20,36))"
