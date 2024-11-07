@@ -445,6 +445,12 @@ o:value("https", translate("https"))
 o.default     = "udp"
 o.rempty      = false
 
+o = s:option(Value, "server_group", translate("Server Group"), translate("Group name"))
+o.rmempty     = true
+o.placeholder = "default"
+o.datatype    = "hostname"
+o.rempty      = true
+
 ---- domain rules;
 s = m:section(TypedSection, "domain-rule", translate("Domain Rules"), translate("Domain Rules Settings"))
 s.anonymous = true
