@@ -25,6 +25,21 @@ IFACE_PATTERNS_VIRTUAL  = { }
 IFACE_PATTERNS_IGNORE   = { "^wmaster%d", "^wifi%d", "^hwsim%d", "^imq%d", "^ifb%d", "^mon%.wlan%d", "^sit%d", "^gre%d", "^gretap%d", "^ip6gre%d", "^ip6tnl%d", "^tunl%d", "^lo$" }
 IFACE_PATTERNS_WIRELESS = { "^wlan%d", "^wl%d", "^ath%d", "^%w+%.network%d" }
 
+IFACE_ERRORS = {
+	CONNECT_FAILED			= lng.translate("Connection attempt failed"),
+	INVALID_ADDRESS			= lng.translate("IP address is invalid"),
+	INVALID_GATEWAY			= lng.translate("Gateway address is invalid"),
+	INVALID_LOCAL_ADDRESS	= lng.translate("Local IP address is invalid"),
+	MISSING_ADDRESS			= lng.translate("IP address is missing"),
+	MISSING_PEER_ADDRESS	= lng.translate("Peer address is missing"),
+	NO_DEVICE				= lng.translate("Network device is not present"),
+	NO_IFACE				= lng.translate("Unable to determine device name"),
+	NO_IFNAME				= lng.translate("Unable to determine device name"),
+	NO_WAN_ADDRESS			= lng.translate("Unable to determine external IP address"),
+	NO_WAN_LINK				= lng.translate("Unable to determine upstream interface"),
+	PEER_RESOLVE_FAIL		= lng.translate("Unable to resolve peer host name"),
+	PIN_FAILED				= lng.translate("PIN code rejected")
+}
 
 protocol = utl.class()
 
@@ -391,6 +406,17 @@ end
 
 function register_pattern_virtual(self, pat)
 	IFACE_PATTERNS_VIRTUAL[#IFACE_PATTERNS_VIRTUAL+1] = pat
+end
+
+function register_error_code(self, code, message)
+	if type(code) == "string" and
+	   type(message) == "string" and
+	   not IFACE_ERRORS[code]
+	then
+		IFACE_ERRORS[code] = message
+		return true
+	end
+	return false
 end
 
 
