@@ -156,6 +156,13 @@ ei = s:taboption("general", DynamicList, "notinterface", translate("Exclude inte
 ei.optional = true
 
 
+dhtag = s:taboption("general", DynamicList, "dhcp_option", translate("DHCP OPTION with tag"),
+	translate("After setting the Tagname, fill in the corresponding Tag name in the Static Address Allocation section below"))
+dhtag.optional = true
+dhtag.placeholder = "tag:tagname,3,192.168.1.2"
+dhtag.placeholder = "tag:tagname,6,192.168.1.2"
+
+
 pt = s:taboption("advanced", Value, "port",
 	translate("<abbr title=\"Domain Name System\">DNS</abbr> server port"),
 	translate("Listening port for inbound DNS queries"))
