@@ -1,5 +1,23 @@
 @charset "utf-8";
 
+#maincontent,
+.cbi-section,
+table,
+ul.tabmenu li a,
+textarea,
+select,
+input,
+button,
+div,
+td,
+tr,
+a,
+.error, 
+.cbi-title-ref,
+.warning {
+    border-radius: 6px;
+}
+
 .lang_he {
 	direction: RTL;
 	unicode-bidi: embed;
@@ -19,7 +37,7 @@ body {
 	background-position: bottom center;
 	background-repeat: repeat-x;
 	font-family: Verdana, Arial, sans-serif;
-	font-size: 11pt;
+	font-size: 12pt;
 	line-height: 100%;
 	padding-bottom: 1.5em;
 }
@@ -39,7 +57,7 @@ ul.tabmenu {
 	clear: both;
 	display: block;
 	vertical-align: bottom;
-	font-size: 10pt;
+	font-size: 12pt;
 	padding: 5px 0 0 5px;
 }
 
