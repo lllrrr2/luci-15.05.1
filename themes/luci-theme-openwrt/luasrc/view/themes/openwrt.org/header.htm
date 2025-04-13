@@ -39,7 +39,8 @@
 		end
 	end
 
-	http.prepare_content("application/xhtml+xml")
+	-- send as HTML5
+	http.prepare_content("text/html")
 
 	local function nodeurl(prefix, name, query)
 		local url = controller .. prefix .. name .. "/"
