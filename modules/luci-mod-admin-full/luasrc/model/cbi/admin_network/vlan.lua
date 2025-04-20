@@ -142,8 +142,13 @@ m.uci:foreach("network", "switch",
 			for _, section in luci.util.spairs(
 				osections,
 				function(a, b)
-					return (tonumber(m:get(osections[a], has_vlan4k or "vlan")) or 9999)
-						<  (tonumber(m:get(osections[b], has_vlan4k or "vlan")) or 9999)
+					local val_a = (m:get(osections[a], has_vlan4k or "vlan") or "")
+					val_a = tonumber(val_a:match("%d+") or 9999)
+
+					local val_b = (m:get(osections[b], has_vlan4k or "vlan") or "")
+					val_b = tonumber(val_b:match("%d+") or 9999)
+
+					return val_a < val_b
 				end
 			) do
 				sections[#sections+1] = section
