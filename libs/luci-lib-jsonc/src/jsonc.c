@@ -17,6 +17,7 @@ limitations under the License.
 #define _GNU_SOURCE
 
 #include <math.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <json-c/json.h>
 
@@ -27,6 +28,12 @@ limitations under the License.
 #define LUCI_JSONC "luci.jsonc"
 #define LUCI_JSONC_PARSER "luci.jsonc.parser"
 
+struct seen {
+	size_t size;
+	size_t len;
+	const void *ptrs[];
+};
+
 struct json_state {
 	struct json_object *obj;
 	struct json_tokener *tok;
@@ -35,6 +42,7 @@ struct json_state {
 
 static void _json_to_lua(lua_State *L, struct json_object *obj);
 static struct json_object * _lua_to_json(lua_State *L, int index);
+static struct json_object * _lua_to_json_rec(lua_State *L, int index, struct seen **seen);
 
 static int json_new(lua_State *L)
 {
@@ -106,6 +114,7 @@ static int json_stringify(lua_State *L)
 		flags |= JSON_C_TO_STRING_PRETTY | JSON_C_TO_STRING_SPACED;
 
 	lua_pushstring(L, json_object_to_json_string_ext(obj, flags));
+	json_object_put(obj);
 	return 1;
 }
 
@@ -137,6 +146,7 @@ static int json_parse_chunk(lua_State *L)
 
 static void _json_to_lua(lua_State *L, struct json_object *obj)
 {
+	int64_t v;
 	int n;
 
 	switch (json_object_get_type(obj))
@@ -164,7 +174,12 @@ static void _json_to_lua(lua_State *L, struct json_object *obj)
 		break;
 
 	case json_type_int:
-		lua_pushinteger(L, json_object_get_int(obj));
+		v = json_object_get_int64(obj);
+		if (sizeof(lua_Integer) > sizeof(int32_t) ||
+		    (v >= INT32_MIN && v <= INT32_MAX))
+			lua_pushinteger(L, (lua_Integer)v);
+		else
+			lua_pushnumber(L, (lua_Number)v);
 		break;
 
 	case json_type_double:
@@ -198,6 +213,9 @@ static int _lua_test_array(lua_State *L, int index)
 	int max = 0;
 	lua_Number idx;
 
+	if (!lua_checkstack(L, 2))
+		return -1;
+
 	lua_pushnil(L);
 
 	/* check for non-integer keys */
@@ -222,7 +240,7 @@ static int _lua_test_array(lua_State *L, int index)
 
 out:
 		lua_pop(L, 2);
-		return 0;
+		return -1;
 	}
 
 	/* check for holes */
@@ -242,23 +260,64 @@ out:
 	return max;
 }
 
-static struct json_object * _lua_to_json(lua_State *L, int index)
+
+static bool visited(struct seen **sp, const void *ptr) {
+	struct seen *s = *sp;
+	size_t i;
+
+	if (s->len >= s->size)
+	{
+		i = s->size + 10;
+		s = realloc(*sp, sizeof(struct seen) + sizeof(void *) * i);
+
+		if (!s)
+		{
+			if (*sp)
+				free(*sp);
+
+			*sp = NULL;
+			return true;
+		}
+
+		s->size = i;
+		*sp = s;
+	}
+
+	for (i = 0; i < s->len; i++)
+		if (s->ptrs[i] == ptr)
+			return true;
+
+	s->ptrs[s->len++] = ptr;
+	return false;
+}
+
+static struct json_object * _lua_to_json_rec(lua_State *L, int index,
+                                             struct seen **seen)
 {
-	lua_Number nd, ni;
+	lua_Number nd;
 	struct json_object *obj;
 	const char *key;
 	int i, max;
 
+	if (index < 0)
+		index = lua_gettop(L) + index + 1;
+
 	switch (lua_type(L, index))
 	{
 	case LUA_TTABLE:
+		if (visited(seen, lua_topointer(L, index)))
+			return NULL;
+
 		max = _lua_test_array(L, index);
 
-		if (max > 0)
+		if (max >= 0)
 		{
 			obj = json_object_new_array();
 
 			if (!obj)
+				return NULL;
+
+			if (!lua_checkstack(L, 1))
 				return NULL;
 
 			for (i = 1; i <= max; i++)
@@ -266,7 +325,7 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 				lua_rawgeti(L, index, i);
 
 				json_object_array_put_idx(obj, i - 1,
-				                          _lua_to_json(L, lua_gettop(L)));
+				                          _lua_to_json_rec(L, -1, seen));
 
 				lua_pop(L, 1);
 			}
@@ -279,6 +338,9 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 		if (!obj)
 			return NULL;
 
+		if (!lua_checkstack(L, 3))
+			return NULL;
+
 		lua_pushnil(L);
 
 		while (lua_next(L, index))
@@ -286,8 +348,9 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 			lua_pushvalue(L, -2);
 			key = lua_tostring(L, -1);
 
-			json_object_object_add(obj, key,
-								   _lua_to_json(L, lua_gettop(L) - 1));
+			if (key)
+				json_object_object_add(obj, key,
+				                       _lua_to_json_rec(L, -2, seen));
 
 			lua_pop(L, 2);
 		}
@@ -301,11 +364,13 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 		return json_object_new_boolean(lua_toboolean(L, index));
 
 	case LUA_TNUMBER:
-		nd = lua_tonumber(L, index);
-		ni = lua_tointeger(L, index);
+		if (lua_isinteger(L, index))
+			return json_object_new_int64(lua_tointeger(L, index));
 
-		if (nd == ni)
-			return json_object_new_int(nd);
+		nd = lua_tonumber(L, index);
+
+		if (isfinite(nd) && trunc(nd) == nd)
+			return json_object_new_int64(nd);
 
 		return json_object_new_double(nd);
 
@@ -316,6 +381,23 @@ static struct json_object * _lua_to_json(lua_State *L, int index)
 	return NULL;
 }
 
+static struct json_object * _lua_to_json(lua_State *L, int index)
+{
+	struct seen *s = calloc(sizeof(struct seen) + sizeof(void *) * 10, 1);
+	struct json_object *rv;
+
+	if (!s)
+		return NULL;
+
+	s->size = 10;
+
+	rv = _lua_to_json_rec(L, index, &s);
+
+	free(s);
+
+	return rv;
+}
+
 static int json_parse_set(lua_State *L)
 {
 	struct json_state *s = luaL_checkudata(L, 1, LUCI_JSONC_PARSER);
@@ -324,6 +406,76 @@ static int json_parse_set(lua_State *L)
 	s->obj = _lua_to_json(L, 2);
 
 	return 0;
+}
+
+static int json_parse_sink_closure(lua_State *L)
+{
+	bool finished = lua_toboolean(L, lua_upvalueindex(2));
+	if (lua_isnil(L, 1))
+	{
+		// no more data available
+		if (finished)
+		{
+			// we were finished parsing
+			lua_pushboolean(L, true);
+			return 1;
+		}
+		else
+		{
+			lua_pushnil(L);
+			lua_pushstring(L, "Incomplete JSON data");
+			return 2;
+		}
+	}
+	else
+	{
+		if (finished)
+		{
+			lua_pushnil(L);
+			lua_pushstring(L, "Unexpected data after complete JSON object");
+			return 2;
+		}
+		else
+		{
+			// luci.jsonc.parser.chunk()
+			lua_pushcfunction(L, json_parse_chunk);
+			// parser object from closure
+			lua_pushvalue(L, lua_upvalueindex(1));
+			// chunk
+			lua_pushvalue(L, 1);
+			lua_call(L, 2, 2);
+
+			if (lua_isnil(L, -2))
+			{
+				// an error occurred, leave (nil, errmsg) on the stack and return it
+				return 2;
+			}
+			else if (lua_toboolean(L, -2))
+			{
+				// finished reading, set finished=true and return nil to prevent further input
+				lua_pop(L, 2);
+				lua_pushboolean(L, true);
+				lua_replace(L, lua_upvalueindex(2));
+				lua_pushnil(L);
+				return 1;
+			}
+			else
+			{
+				// not finished reading, return true
+				lua_pop(L, 2);
+				lua_pushboolean(L, true);
+				return 1;
+			}
+		}
+	}
+}
+
+static int json_parse_sink(lua_State *L)
+{
+	luaL_checkudata(L, 1, LUCI_JSONC_PARSER);
+	lua_pushboolean(L, false);
+	lua_pushcclosure(L, json_parse_sink_closure, 2);
+	return 1;
 }
 
 static int json_tostring(lua_State *L)
@@ -365,6 +517,7 @@ static const luaL_reg jsonc_parser_methods[] = {
 	{ "parse",			json_parse_chunk  },
 	{ "get",			json_parse_get    },
 	{ "set",			json_parse_set    },
+	{ "sink",			json_parse_sink   },
 	{ "stringify",		json_tostring     },
 
 	{ "__gc",			json_gc           },
