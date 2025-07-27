@@ -9,7 +9,7 @@ LUCI_TITLE:=Open App Filter Module
 LUCI_PKGARCH:=all
 LUCI_DEPENDS:=+appfilter +kmod-oaf
 PKG_NAME:=luci-app-oaf
-PKG_VERSION:=6.1.1
+PKG_VERSION:=6.1.2
 PKG_RELEASE:=1
 include $(TOPDIR)/feeds/luci/luci.mk
 
