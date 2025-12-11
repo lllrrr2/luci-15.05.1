@@ -1044,7 +1044,8 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 		translate("Reassociation Deadline"),
 		translate("time units (TUs / 1.024 ms) [1000-65535]"))
 	reassociation_deadline:depends({ieee80211r="1"})
-	reassociation_deadline.placeholder = "1000"
+	reassociation_deadline.placeholder = "20000"
+	reassociation_deadline.default = "20000"
 	reassociation_deadline.datatype = "range(1000,65535)"
 	reassociation_deadline.rmempty = true
 
@@ -1052,6 +1053,7 @@ if hwtype == "mac80211" or hwtype == "prism2" then
 	ft_protocol:depends({ieee80211r="1"})
 	ft_protocol:value("1", translatef("FT over DS"))
 	ft_protocol:value("0", translatef("FT over the Air"))
+	ft_protocol.default = "0"
 	ft_protocol.rmempty = true
 
 	ft_psk_generate_local = s:taboption("encryption", Flag, "ft_psk_generate_local",
