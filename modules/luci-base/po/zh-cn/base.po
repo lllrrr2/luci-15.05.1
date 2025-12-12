@@ -3249,6 +3249,68 @@ msgstr "BSS 传输管理"
 msgid "Time advertisement"
 msgstr "广播同步时间"
 
+msgid "Enables fast roaming among access points that belong to the same Mobility Domain"
+msgstr "启用属于同一移动域接入点之间的快速漫游"
+
+msgid "Mobility Domain"
+msgstr "移动域"
+
+msgid "4-character hexadecimal ID"
+msgstr "4字符的十六进制 ID"
+
+msgid "Reassociation Deadline"
+msgstr "重关联截止时间"
+
+msgid "time units (TUs / 1.024 ms) [1000-65535]"
+msgstr "单位时间 (TUs / 1.024 ms) [1000-65535]"
+
+msgid "FT protocol"
+msgstr "FT 协议"
+
+msgid "Generate PMK locally"
+msgstr "本地生成 PMK"
+
+msgid "When using a PSK, the PMK can be generated locally without inter AP communications"
+msgstr "使用 PMK 时, 可以自动生成 PMK, 因此以下 R0/R1 密钥选项不生效。若要使用R0和R1密钥则禁用此选项"
+
+msgid "R0 Key Lifetime"
+msgstr "R0密钥生存期"
+
+msgid "R1 Key Holder"
+msgstr "R1密钥持有者"
+
+msgid "PMK R1 Push"
+msgstr "PMK R1 推送"
+
+msgid "External R0 Key Holder List"
+msgstr "外部R0密钥持有者列表"
+
+msgid ""
+"List of R0KHs in the same Mobility Domain. "
+"<br />Format: MAC-address,NAS-Identifier,128-bit key as hex string. "
+"<br />This list is used to map R0KH-ID (NAS Identifier) to a destination "
+"MAC address when requesting PMK-R1 key from the R0KH that the STA "
+"used during the Initial Mobility Domain Association."
+msgstr ""
+"同一移动域中的 R0KH 列表。<br />格式：MAC 地址，NAS 标识符，128 位密钥（十六"
+"进制字符串）。<br />在从初始移动域关联期间使用的 R0KH 中请求 PMK-R1 密钥时，"
+"该列表用于将 R0KH-ID（NAS 标识符）映射到目标 MAC 地址。"
+
+msgid "External R1 Key Holder List"
+msgstr "外部R1密钥持有者列表"
+
+msgid ""
+"List of R1KHs in the same Mobility Domain. "
+"<br />Format: MAC-address,R1KH-ID as 6 octets with colons,128-bit key as hex string. "
+"<br />This list is used to map R1KH-ID to a destination MAC address "
+"when sending PMK-R1 key from the R0KH. This is also the "
+"list of authorized R1KHs in the MD that can request PMK-R1 keys."
+msgstr ""
+"同一移动域中的 R1KH 列表。<br />格式：MAC 地址，R1KH-ID（包含冒号的 6 个八位"
+"字节），128 位密钥（十六进制字符串）。<br />当从 R0KH 发送 PMK-R1 键时，此列"
+"表用于将 R1KH-ID 映射到目标 MAC 地址。这也是可以请求 PMK-R1 键的 MD 中授权的 "
+"R1KH 的列表。"
+
 msgid "time zone"
 msgstr "时区"
 
