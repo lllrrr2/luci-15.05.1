@@ -1636,7 +1636,7 @@ function wifinet.bitrate(self)
 end
 
 function wifinet.channel(self)
-    return self.iwinfo.channel or self:ubus("dev", "config", "channel") or
+	return self.iwinfo.channel or self:ubus("dev", "config", "channel") or
         (self:get("disabled") ~= "1" and tonumber(self:get("channel")))
 end
 

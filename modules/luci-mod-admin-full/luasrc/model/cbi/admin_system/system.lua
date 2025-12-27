@@ -41,7 +41,7 @@ end
 
 
 o = s:taboption("general", ListValue, "zonename", translate("Timezone"))
-o:value("UTC")
+o:value("Asia/Shanghai")
 
 for i, zone in ipairs(zones.TZ) do
 	o:value(zone[1])

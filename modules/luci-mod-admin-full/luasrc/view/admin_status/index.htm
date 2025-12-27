@@ -158,6 +158,157 @@
 		return null;
 	}
 
+	var macPrefixToDevice = {};
+
+	var deviceIcons = {
+		"mi": "mi.png",
+		"apple": "apple.png",
+		"huawei": "huawei.png",
+		"honor": "honor.png",
+		"oppo": "oppo.png",
+		"realme": "realme.png",
+		"vivo": "vivo.png",
+		"lenovo": "lenovo.png",
+		"orangepi": "orangepi.png",
+		"dell": "dell.png",
+		"iqoo": "iqoo.png",
+		"mijia": "mijia.png",
+		"tmall": "tmall.png",
+		"xiaotiancai": "xiaotiancai.png",
+		"router": "router.png",
+		"tv": "tv.png",
+		"motorola": "motorola.png",
+		"panel_ap": "panel_ap.png",
+		"voip_fxs": "voip_fxs.png",
+		"printer": "printer.png",
+		"iptv": "iptv.png",
+		"nas": "nas.png",
+		"midea": "midea.png",
+		"default": "pc.png"
+	};
+
+	function initMacPrefixMap() {
+		["10:3f:44", "2c:d0:66", "58:20:59", "64:a2:00", "64:cc:2e", 
+		 "8e:49:53", "98:f6:21", "a4:50:46", "b6:3c:d2", "ea:ea:9d", 
+		 "ec:41:18", "e8:ca:c8", "f4:f5:db"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "mi";
+		});
+
+		["00:5b:94", "34:a8:eb", "50:82:d5", "64:20:0c", "7a:51:e7", 
+		 "80:be:05", "ae:0b:09", "b8:c1:11", "e2:c1:63", "dc:a9:04"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "apple";
+		});
+
+		["02:5f:84", "02:f8:ea", "04:4f:4c", "12:65:e3", "18:3c:b7", 
+		 "22:17:16", "22:35:b4", "22:df:c6", "24:31:54", "30:a2:c2", 
+		 "32:bc:0e", "3c:cd:5d", "50:01:d9", "62:7f:f0", "6a:fc:40", 
+		 "74:59:09", "7c:a1:77", "82:51:80", "82:a0:d3", "82:a5:6b", 
+		 "82:ef:22", "90:2b:d2", "96:c9:cb", "9c:b2:b2", "a2:65:69", 
+		 "a8:e5:44", "b2:3d:8c", "c2:56:e7", "c2:98:4b", "c2:d0:55", 
+		 "d2:7e:7b", "dc:16:b2", "e2:08:88", "f2:49:84", "f2:6f:80", 
+		 "f2:f9:db"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "huawei";
+		});
+
+		["22:f2:24", "32:5e:86", "a2:84:d5", "b2:8b:c8", "e4:a7:c5"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "honor";
+		});
+
+		["08:4a:cf", "60:21:01", "0a:b1:0e", "3a:01:c5", "ac:c4:bd",
+		 "b4:20:5b"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "oppo";
+		});
+
+		["d0:5a:fd"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "realme";
+		});
+
+		["2a:da:93"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "vivo";
+		});
+
+		["ac:38:70"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "lenovo";
+		});
+
+		["02:81:eb"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "orangepi";
+		});
+
+		["00:22:5f"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "dell";
+		});
+
+		["3e:54:f7", "8e:a3:3b", "be:22:ff", "f6:c2:4b"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "iqoo";
+		});
+
+		["64:90:c1", "5c:e5:0c", "44:23:7c"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "mijia";
+		});
+
+		["84:44:af", "8c:6d:50", "78:da:07"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "tmall";
+		});
+
+		["e0:76:d0"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "xiaotiancai";
+		});
+
+		["04:5f:a7", "20:76:93", "38:83:45", "3c:40:4f", "78:a3:51", 
+		 "78:d3:8d","88:c3:97", "cc:08:fb", "d4:ee:07", "dc:d8:7c"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "router";
+		});
+
+		["2c:e0:32", "6c:22:1a"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "tv";
+		});
+
+		["50:2f:bb", "16:0a:de"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "motorola";
+		});
+
+		["74:96:37", "8a:0c:ca"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "panel_ap";
+		});
+
+		["00:21:f2"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "voip_fxs";
+		});
+
+		["9c:ae:d3"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "printer";
+		});
+
+		["00:07:63", "00:ac:1f", "04:95:73", "0c:56:5c", "30:50:fd", 
+		 "74:c9:a3", "74:ff:4c", "78:53:0d", "90:d8:f3", "ac:00:d0", 
+		 "c8:64:c7", "f4:4c:70"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "iptv";
+		});
+
+		["00:11:32"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "nas";
+		});
+
+		["f0:c9:d1"].forEach(function(prefix) {
+			macPrefixToDevice[prefix.toLowerCase()] = "midea";
+		});
+	}
+
+	function getDeviceIcon(macAddr) {
+		if (!macAddr || macAddr.length < 8) {
+			return String.format('<img src="<%=resource%>/icons/devices/pc.png" />');
+		}
+		
+		var macPrefix = macAddr.substring(0, 8).toLowerCase();
+		var deviceType = macPrefixToDevice[macPrefix] || "default";
+		var icon = deviceIcons[deviceType] || deviceIcons["default"];
+		
+		return String.format('<img src="<%=resource%>/icons/devices/%s" />', icon);
+	}
+
+	initMacPrefixMap();
+
 	var npoll = 1;
 	var hosts = <%=luci.http.write_json(luci.sys.net.host_hints())%>;
 
@@ -378,50 +529,7 @@
 					var tr = ls.rows[0].parentNode.insertRow(-1);
 						tr.className = 'cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1);
 
-					tr.insertCell(-1).innerHTML = (function(devmac) {
-									var devmac = info.leases[i].macaddr.substring(0,8);
-									if (devmac == "10:3f:44" || devmac == "2c:d0:66" || devmac == "58:20:59" || devmac == "64:a2:00" || devmac == "64:cc:2e" || devmac == "98:f6:21" || devmac == "a4:50:46" || devmac == "b6:3c:d2" || devmac == "ea:ea:9d" || devmac == "ec:41:18" || devmac == "e8:ca:c8" || devmac == "f4:f5:db")
-										return String.format('<img src="<%=resource%>/icons/devices/mi.png" />')
-									else if (devmac == "00:5b:94" || devmac == "34:a8:eb"  || devmac == "50:82:d5" || devmac == "64:20:0c" || devmac == "7a:51:e7" || devmac == "80:be:05" || devmac == "ae:0b:09"  || devmac == "b8:c1:11"  || devmac == "dc:a9:04")
-										return String.format('<img src="<%=resource%>/icons/devices/apple.png" />')
-									else if (devmac == "02:5f:84" || devmac == "02:f8:ea" || devmac == "04:4f:4c" || devmac == "12:65:e3" || devmac == "18:3c:b7" || devmac == "22:17:16" || devmac == "22:35:b4" || devmac == "22:df:c6" || devmac == "24:31:54" || devmac == "30:a2:c2" || devmac == "32:bc:0e" || devmac == "3c:cd:5d" || devmac == "50:01:d9" || devmac == "62:7f:f0" || devmac == "6a:fc:40" || devmac == "74:59:09" || devmac == "7c:a1:77" || devmac == "82:51:80" || devmac == "82:a0:d3" || devmac == "82:a5:6b" || devmac == "82:ef:22" || devmac == "90:2b:d2" || devmac == "96:c9:cb" || devmac == "9c:b2:b2" || devmac == "a2:65:69" || devmac == "a8:e5:44" || devmac == "b2:3d:8c" || devmac == "c2:56:e7" || devmac == "c2:98:4b" || devmac == "c2:d0:55" || devmac == "d2:7e:7b" || devmac == "dc:16:b2" || devmac == "e2:08:88" || devmac == "f2:49:84" || devmac == "f2:6f:80" || devmac == "f2:f9:db")
-										return String.format('<img src="<%=resource%>/icons/devices/huawei.png" />')
-									else if (devmac == "22:f2:24" || devmac == "32:5e:86" || devmac == "a2:84:d5" || devmac == "b2:8b:c8" || devmac == "e4:a7:c5")
-										return String.format('<img src="<%=resource%>/icons/devices/honor.png" />')
-									else if (devmac == "08:4a:cf" || devmac == "60:21:01"  || devmac == "ac:c4:bd" || devmac == "b4:20:5b")
-										return String.format('<img src="<%=resource%>/icons/devices/oppo.png" />')
-									else if (devmac == "d0:5a:fd")
-										return String.format('<img src="<%=resource%>/icons/devices/realme.png" />')
-									else if (devmac == "2a:da:93")
-										return String.format('<img src="<%=resource%>/icons/devices/vivo.png" />')
-									else if (devmac == "ac:38:70")
-										return String.format('<img src="<%=resource%>/icons/devices/lenovo.png" />')
-									else if (devmac == "02:81:eb")
-										return String.format('<img src="<%=resource%>/icons/devices/orangepi.png" />')
-									else if (devmac == "00:22:5f")
-										return String.format('<img src="<%=resource%>/icons/devices/dell.png" />')
-									else if (devmac == "3e:54:f7" || devmac == "8e:a3:3b" || devmac == "f6:c2:4b")
-										return String.format('<img src="<%=resource%>/icons/devices/iqoo.png" />')
-									else if (devmac == "64:90:c1" || devmac == "5c:e5:0c" || devmac == "44:23:7c")
-										return String.format('<img src="<%=resource%>/icons/devices/mijia.png" />')
-									else if (devmac == "84:44:af" || devmac == "8c:6d:50" || devmac == "78:da:07")
-										return String.format('<img src="<%=resource%>/icons/devices/tmall.png" />')
-									else if (devmac == "e0:76:d0")
-										return String.format('<img src="<%=resource%>/icons/devices/xiaotiancai.png" />')
-									else if (devmac == "04:5f:a7" || devmac == "20:76:93" || devmac == "38:83:45" || devmac == "78:a3:51" || devmac == "78:d3:8d" || devmac == "88:c3:97" || devmac == "cc:08:fb" || devmac == "d4:ee:07" || devmac == "dc:d8:7c")
-										return String.format('<img src="<%=resource%>/icons/devices/router.png" />')
-									else if (devmac == "9c:ae:d3")
-										return String.format('<img src="<%=resource%>/icons/devices/printer.png" />')
-									else if (devmac == "00:07:63" || devmac == "00:ac:1f" || devmac == "04:95:73" || devmac == "0c:56:5c" || devmac == "30:50:fd" || devmac == "74:c9:a3" || devmac == "74:ff:4c" || devmac == "78:53:0d" || devmac == "90:d8:f3" || devmac == "ac:00:d0" || devmac == "c8:64:c7" || devmac == "f4:4c:70")
-										return String.format('<img src="<%=resource%>/icons/devices/iptv.png" />')
-									else if (devmac == "00:11:32")
-										return String.format('<img src="<%=resource%>/icons/devices/nas.png" />')
-									else if (devmac == "f0:c9:d1")
-										return String.format('<img src="<%=resource%>/icons/devices/midea.png" />')
-									else
-										return String.format('<img src="<%=resource%>/icons/devices/pc.png" />')
-									end
-									})();
+					tr.insertCell(-1).innerHTML = getDeviceIcon(info.leases[i].macaddr);
 					tr.insertCell(-1).innerHTML = info.leases[i].hostname ? info.leases[i].hostname : '?';
 					tr.insertCell(-1).innerHTML = info.leases[i].ipaddr;
 					tr.insertCell(-1).innerHTML = info.leases[i].macaddr;
@@ -626,50 +734,7 @@
 						assoclist[i].radio, assoclist[i].ifname
 					);
 
-					tr.insertCell(-1).innerHTML = (function(devmac) {
-						var devmac = assoclist[i].bssid.substring(0,8).toLowerCase();
-						if (devmac == "10:3f:44" || devmac == "2c:d0:66" || devmac == "58:20:59" || devmac == "64:cc:2e" || devmac == "98:f6:21" || devmac == "a4:50:46" || devmac == "ec:41:18" || devmac == "e8:ca:c8" || devmac == "f4:f5:db")
-							return String.format('<img src="<%=resource%>/icons/devices/mi.png" />')
-						else if (devmac == "00:5b:94" || devmac == "34:a8:eb" | devmac == "64:20:0c" | devmac == "7a:51:e7" || devmac == "80:be:05" || devmac == "ae:0b:09"  || devmac == "b8:c1:11"  || devmac == "dc:a9:04")
-							return String.format('<img src="<%=resource%>/icons/devices/apple.png" />')
-						else if (devmac == "02:5f:84" || devmac == "02:f8:ea" || devmac == "12:65:e3" || devmac == "18:3c:b7" || devmac == "22:df:c6" || devmac == "24:31:54" || devmac == "30:a2:c2" || devmac == "32:bc:0e" || devmac == "3c:cd:5d" || devmac == "50:01:d9" || devmac == "74:59:09" || devmac == "7c:a1:77" || devmac == "82:51:80" || devmac == "82:a0:d3" || devmac == "82:a5:6b" || devmac == "82:ef:22" || devmac == "90:2b:d2" || devmac == "96:c9:cb" || devmac == "9c:b2:b2" || devmac == "a2:65:69" || devmac == "a8:e5:44" || devmac == "b2:3d:8c" || devmac == "c2:56:e7" || devmac == "c2:98:4b" || devmac == "c2:d0:55" || devmac == "d2:7e:7b" || devmac == "dc:16:b2" || devmac == "e2:08:88" || devmac == "f2:49:84" || devmac == "f2:6f:80" || devmac == "f2:f9:db")
-							return String.format('<img src="<%=resource%>/icons/devices/huawei.png" />')
-						else if (devmac == "e4:a7:c5")
-							return String.format('<img src="<%=resource%>/icons/devices/honor.png" />')
-						else if (devmac == "b4:20:5b" || devmac == "08:4a:cf")
-							return String.format('<img src="<%=resource%>/icons/devices/oppo.png" />')
-						else if (devmac == "d0:5a:fd")
-							return String.format('<img src="<%=resource%>/icons/devices/realme.png" />')
-						else if (devmac == "2a:da:93")
-							return String.format('<img src="<%=resource%>/icons/devices/vivo.png" />')
-						else if (devmac == "ac:38:70")
-							return String.format('<img src="<%=resource%>/icons/devices/lenovo.png" />')
-						else if (devmac == "02:81:eb")
-							return String.format('<img src="<%=resource%>/icons/devices/orangepi.png" />')
-						else if (devmac == "00:22:5f")
-							return String.format('<img src="<%=resource%>/icons/devices/dell.png" />')
-						else if (devmac == "3e:54:f7" || devmac == "8e:a3:3b" || devmac == "f6:c2:4b")
-							return String.format('<img src="<%=resource%>/icons/devices/iqoo.png" />')
-						else if (devmac == "64:90:c1" || devmac == "5c:e5:0c" || devmac == "44:23:7c")
-							return String.format('<img src="<%=resource%>/icons/devices/mijia.png" />')
-						else if (devmac == "84:44:af" || devmac == "8c:6d:50" || devmac == "78:da:07")
-							return String.format('<img src="<%=resource%>/icons/devices/tmall.png" />')
-						else if (devmac == "e0:76:d0")
-							return String.format('<img src="<%=resource%>/icons/devices/xiaotiancai.png" />')
-						else if (devmac == "04:5f:a7" || devmac == "20:76:93" || devmac == "38:83:45" || devmac == "78:a3:51" || devmac == "78:d3:8d" || devmac == "88:c3:97" || devmac == "cc:08:fb" || devmac == "d4:ee:07" || devmac == "dc:d8:7c")
-							return String.format('<img src="<%=resource%>/icons/devices/router.png" />')
-						else if (devmac == "9c:ae:d3")
-							return String.format('<img src="<%=resource%>/icons/devices/printer.png" />')
-						else if (devmac == "00:07:63" || devmac == "00:ac:1f" || devmac == "04:95:73" || devmac == "0c:56:5c" || devmac == "30:50:fd" || devmac == "74:c9:a3" || devmac == "74:ff:4c" || devmac == "90:d8:f3" || devmac == "ac:00:d0" || devmac == "c8:64:c7" || devmac == "f4:4c:70")
-							return String.format('<img src="<%=resource%>/icons/devices/iptv.png" />')
-						else if (devmac == "00:11:32")
-							return String.format('<img src="<%=resource%>/icons/devices/nas.png" />')
-						else if (devmac == "f0:c9:d1")
-							return String.format('<img src="<%=resource%>/icons/devices/midea.png" />')
-						else
-							return String.format('<img src="<%=resource%>/icons/devices/pc.png" />')
-						end
-						})();
+					tr.insertCell(-1).innerHTML = getDeviceIcon(assoclist[i].bssid);
 
 					tr.insertCell(-1).innerHTML = String.format(
 						'<a href="%s">%s</a>',
