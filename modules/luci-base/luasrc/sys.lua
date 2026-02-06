@@ -112,7 +112,7 @@ function httpget(url, stream, target)
 end
 
 function reboot()
-	return os.execute("reboot >/dev/null 2>&1")
+	return os.execute("/bin/busybox reboot >/dev/null 2>&1")
 end
 
 function syslog()
