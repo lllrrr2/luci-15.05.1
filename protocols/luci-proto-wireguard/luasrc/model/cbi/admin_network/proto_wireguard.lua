@@ -5,8 +5,21 @@
 local map, section, net = ...
 local ifname = net:get_interface():name()
 local private_key, listen_port
-local metric, mtu, preshared_key
-local peers, public_key, allowed_ips, endpoint, persistent_keepalive
+local metric, mtu, preshared_key, peers, public_key, allowed_ips, endpoint, persistent_keepalive
+
+
+-- key generation function
+local function generate_key_pair()
+  local util = require("luci.util")
+  local private = util.exec("wg genkey 2>/dev/null")
+  local public = ""
+  if private and #private > 0 then
+    private = private:gsub("\n", "")
+    public = util.exec("echo -n '" .. private .. "' | wg pubkey 2>/dev/null")
+    public = public:gsub("\n", "")
+  end
+  return private, public
+end
 
 
 -- general ---------------------------------------------------------------------
@@ -21,6 +34,53 @@ private_key = section:taboption(
 private_key.password = true
 private_key.datatype = "rangelength(44, 44)"
 private_key.optional = false
+
+
+-- generate keys button
+local gen_btn = section:taboption("general", Button, "_generate")
+gen_btn.title = " "
+gen_btn.inputtitle = translate("Generate Keys")
+gen_btn.inputstyle = "apply"
+gen_btn.write = function()
+  local private, public = generate_key_pair()
+  if private and public then
+    luci.http.prepare_content("text/html")
+    luci.http.write([[
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"><title>]] .. translate("WireGuard Keys Generated") .. [[</title>
+    <style>
+      body { font-family:sans-serif; padding:30px; background:#f9f9f9; color:#333; }
+      .key-box { background:#fff; border:1px solid #ccc; border-radius:4px; padding:15px; margin:15px 0; font-family:monospace; word-break:break-all; }
+      .warning { background:#fff3cd; border:1px solid #ffc107; color:#856404; padding:10px; border-radius:4px; }
+      button { background:#0066cc; color:white; border:none; padding:10px 20px; border-radius:4px; margin:5px; cursor:pointer; }
+    </style>
+    <script>
+    function copyToClipboard(text) {
+      var textarea = document.createElement('textarea');
+      textarea.value = text; document.body.appendChild(textarea);
+      textarea.select(); document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert(']] .. translate("Copied!") .. [[');
+    }
+    function closeWindow() { window.close(); }
+    </script>
+    </head>
+    <body>
+      <h3>🔑 ]] .. translate("WireGuard Keys Generated") .. [[</h3>
+      <div class="warning"><strong>⚠️ ]] .. translate("Private Key MUST be kept secret!") .. [[</strong></div>
+      <div><strong>🔒 ]] .. translate("Private Key:") .. [[</strong></div>
+      <div class="key-box">]] .. private .. [[</div>
+      <button onclick="copyToClipboard(']] .. private .. [[')">📋 ]] .. translate("Copy Private Key") .. [[</button>
+      <div style="margin-top:20px;"><strong>🔓 ]] .. translate("Public Key:") .. [[</strong></div>
+      <div class="key-box">]] .. public .. [[</div>
+      <button onclick="copyToClipboard(']] .. public .. [[')">📋 ]] .. translate("Copy Public Key") .. [[</button>
+      <p><button onclick="closeWindow()">✖ ]] .. translate("Close") .. [[</button></p>
+    </body>
+    </html>
+    ]])
+  end
+end
 
 
 listen_port = section:taboption(
