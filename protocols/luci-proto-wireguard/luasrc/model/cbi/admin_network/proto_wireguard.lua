@@ -22,6 +22,18 @@ local function generate_key_pair()
 end
 
 
+-- Secure JSON string escaping function
+local function escape_json_string(s)
+  if not s then return "" end
+  s = s:gsub("\\", "\\\\")
+  s = s:gsub('"', '\\"')
+  s = s:gsub("\n", "\\n")
+  s = s:gsub("\r", "\\r")
+  s = s:gsub("\t", "\\t")
+  return s
+end
+
+
 -- general ---------------------------------------------------------------------
 
 private_key = section:taboption(
@@ -51,31 +63,61 @@ gen_btn.write = function()
     <head><meta charset="utf-8"><title>]] .. translate("WireGuard Keys Generated") .. [[</title>
     <style>
       body { font-family:sans-serif; padding:30px; background:#f9f9f9; color:#333; }
-      .key-box { background:#fff; border:1px solid #ccc; border-radius:4px; padding:15px; margin:15px 0; font-family:monospace; word-break:break-all; }
-      .warning { background:#fff3cd; border:1px solid #ffc107; color:#856404; padding:10px; border-radius:4px; }
-      button { background:#0066cc; color:white; border:none; padding:10px 20px; border-radius:4px; margin:5px; cursor:pointer; }
+      h3 { color:#0066cc; margin-bottom:20px; }
+      .key-box { background:#fff; border:1px solid #ccc; border-radius:4px; padding:15px; 
+                margin:15px 0; font-family:monospace; word-break:break-all; }
+      .warning { background:#fff3cd; border:1px solid #ffc107; color:#856404; 
+                 padding:10px; border-radius:4px; margin:15px 0; }
+      .private-key { background:#fff0f0; border-color:#dc3545; }
+      button { background:#0066cc; color:white; border:none; padding:10px 20px; 
+               border-radius:4px; margin:5px; cursor:pointer; }
+      button:hover { background:#0052a3; }
+      button.copy { background:#28a745; }
     </style>
     <script>
-    function copyToClipboard(text) {
+    var keyData = {
+      private: "]] .. escape_json_string(private) .. [[",
+      public: "]] .. escape_json_string(public) .. [["
+    };
+    
+    function copyToClipboard(type) {
+      var text = type === 'private' ? keyData.private : keyData.public;
       var textarea = document.createElement('textarea');
-      textarea.value = text; document.body.appendChild(textarea);
-      textarea.select(); document.execCommand('copy');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
       document.body.removeChild(textarea);
-      alert(']] .. translate("Copied!") .. [[');
+      
+      var btn = event.target;
+      var originalText = btn.innerHTML;
+      btn.innerHTML = '✓ ]] .. translate("Copied!") .. [[';
+      setTimeout(function() {
+        btn.innerHTML = originalText;
+      }, 1500);
     }
+    
     function closeWindow() { window.close(); }
+    
+    window.onload = function() {
+      document.getElementById('private_key_display').textContent = keyData.private;
+      document.getElementById('public_key_display').textContent = keyData.public;
+    };
     </script>
     </head>
     <body>
       <h3>🔑 ]] .. translate("WireGuard Keys Generated") .. [[</h3>
       <div class="warning"><strong>⚠️ ]] .. translate("Private Key MUST be kept secret!") .. [[</strong></div>
-      <div><strong>🔒 ]] .. translate("Private Key:") .. [[</strong></div>
-      <div class="key-box">]] .. private .. [[</div>
-      <button onclick="copyToClipboard(']] .. private .. [[')">📋 ]] .. translate("Copy Private Key") .. [[</button>
-      <div style="margin-top:20px;"><strong>🔓 ]] .. translate("Public Key:") .. [[</strong></div>
-      <div class="key-box">]] .. public .. [[</div>
-      <button onclick="copyToClipboard(']] .. public .. [[')">📋 ]] .. translate("Copy Public Key") .. [[</button>
-      <p><button onclick="closeWindow()">✖ ]] .. translate("Close") .. [[</button></p>
+      
+      <div class="key-label">🔒 ]] .. translate("Private Key (SECRET)") .. [[</div>
+      <div class="key-box private-key" id="private_key_display"></div>
+      <button class="copy" onclick="copyToClipboard('private')">📋 ]] .. translate("Copy Private Key") .. [[</button>
+      
+      <div class="key-label" style="margin-top:25px;">🔓 ]] .. translate("Public Key (Share)") .. [[</div>
+      <div class="key-box" id="public_key_display"></div>
+      <button class="copy" onclick="copyToClipboard('public')">📋 ]] .. translate("Copy Public Key") .. [[</button>
+      
+      <p><button class="close" onclick="closeWindow()">✖ ]] .. translate("Close Window") .. [[</button></p>
     </body>
     </html>
     ]])
