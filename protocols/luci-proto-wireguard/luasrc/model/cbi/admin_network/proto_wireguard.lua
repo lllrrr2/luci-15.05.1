@@ -5,7 +5,7 @@
 local map, section, net = ...
 local ifname = net:get_interface():name()
 local private_key, listen_port
-local metric, mtu, preshared_key, peers, public_key, allowed_ips, endpoint, persistent_keepalive
+local metric, mtu, preshared_key
 
 
 -- key generation function
@@ -146,6 +146,89 @@ addresses = section:taboption(
 addresses.datatype = "ipaddr"
 addresses.optional = true
 
+-- Stylish separator for Peer Configuration
+local peer_separator = section:taboption("general", DummyValue, "_peer_separator")
+peer_separator.title = " "
+peer_separator.rawhtml = true
+peer_separator.value = [[
+<div style="margin:30px 0 20px 0; width:100%; display:flex; justify-content:left;">
+  <div style="display:inline-block; background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+              padding:15px 40px; border-radius:50px; box-shadow:0 4px 15px rgba(0,0,0,0.2);
+              border:2px solid #fff;">
+    <span style="font-size:18px; font-weight:bold; color:white; text-shadow:1px 1px 2px rgba(0,0,0,0.3);
+                 letter-spacing:1px;">
+      ⚡ ]] .. translate("PEER CONFIGURATION") .. [[ ⚡
+    </span>
+  </div>
+</div>
+<div style="width:100%; text-align:left; margin-bottom:20px;">
+  <span style="color:#666; font-size:14px;">
+    ]] .. translate("Configure the remote peer connection settings below") .. [[
+  </span>
+</div>
+]]
+
+-- Peer Public Key
+local peer_public = section:taboption(
+  "general",
+  Value,
+  "peer_public_key",
+  translate("Peer Public Key"),
+  translate("Required. Public key of the remote peer you want to connect to.")
+)
+peer_public.datatype = "rangelength(44, 44)"
+peer_public.optional = false
+peer_public.rmempty = true
+
+-- Peer Allowed IPs
+local peer_allowed_ips = section:taboption(
+  "general",
+  DynamicList,
+  "peer_allowed_ips",
+  translate("Peer Allowed IPs"),
+  translate("IP addresses that this peer is allowed to use. ") ..
+  translate("Example: 10.0.0.2/32 for a single IP, or 0.0.0.0/0 to route all traffic through this peer.")
+)
+peer_allowed_ips.datatype = "ipaddr"
+peer_allowed_ips.optional = false
+peer_allowed_ips.rmempty = false
+
+-- Peer Endpoint
+local peer_endpoint = section:taboption(
+  "general",
+  Value,
+  "peer_endpoint",
+  translate("Peer Endpoint"),
+  translate("Optional. Address of the remote peer. ") ..
+  translate("Format: host:port (e.g., vpn.example.com:51820 or [2001:db8::1]:51820). ") ..
+  translate("Leave empty if this peer will initiate the connection to you.")
+)
+peer_endpoint.placeholder = "vpn.example.com:51820"
+peer_endpoint.optional = true
+
+-- Peer Keep Alive
+local peer_keepalive = section:taboption(
+  "general",
+  Value,
+  "peer_persistent_keepalive",
+  translate("Keep Alive"),
+  translate("Optional. Send keep-alive packets every N seconds. ") ..
+  translate("Set to 25 if peer is behind NAT. Set to 0 to disable.")
+)
+peer_keepalive.datatype = "range(0, 65535)"
+peer_keepalive.placeholder = "25"
+peer_keepalive.optional = true
+peer_keepalive.default = "0"
+
+-- Route Allowed IPs flag
+local route_allowed_ips = section:taboption(
+  "general",
+  Flag,
+  "route_allowed_ips",
+  translate("Route Allowed IPs"),
+  translate("Optional. Create routes for Allowed IPs for this peer.")
+)
+
 
 -- advanced --------------------------------------------------------------------
 
@@ -168,8 +251,8 @@ mtu = section:taboption(
   translate("MTU"),
   translate("Optional. Maximum Transmission Unit of tunnel interface.")
 )
-mtu.datatype = "range(1280,1423)"
-mtu.placeholder = "1423"
+mtu.datatype = "range(1280,1420)"
+mtu.placeholder = "1420"
 mtu.optional = true
 
 
@@ -185,76 +268,23 @@ preshared_key.password = true
 preshared_key.datatype = "rangelength(44, 44)"
 preshared_key.optional = true
 
-
--- peers -----------------------------------------------------------------------
-
-peers = map:section(
-  TypedSection,
-  "wireguard_" .. ifname,
-  translate("Peers"),
-  translate("Further information about WireGuard interfaces and peers " ..
-            "at <a href=\"http://wireguard.io\">wireguard.io</a>.")
-)
-peers.template = "cbi/tsection"
-peers.anonymous = true
-peers.addremove = true
-
-
-public_key = peers:option(
-  Value,
-  "public_key",
-  translate("Public Key"),
-  translate("Required. Public key of peer.")
-)
-public_key.datatype = "rangelength(44, 44)"
-public_key.optional = false
-
-
-allowed_ips = peers:option(
-  DynamicList,
-  "allowed_ips",
-  translate("Allowed IPs"),
-  translate("Required. IP addresses and prefixes that this peer is allowed " ..
-            "to use inside the tunnel. Usually the peer's tunnel IP " ..
-            "addresses and the networks the peer routes through the tunnel.")
-)
-allowed_ips.datatype = "ipaddr"
-allowed_ips.optional = false
-
-
-route_allowed_ips = peers:option(
-  Flag,
-  "route_allowed_ips",
-  translate("Route Allowed IPs"),
-  translate("Optional. Create routes for Allowed IPs for this peer.")
-)
-
-
-endpoint_host = peers:option(
-  Value,
-  "endpoint_host",
-  translate("Endpoint Host"),
-  translate("Optional. Host of peer. Names are resolved " ..
-            "prior to bringing up the interface."))
-endpoint_host.placeholder = "vpn.example.com"
-endpoint_host.datatype = "host"
-
-
-endpoint_port = peers:option(
-  Value,
-  "endpoint_port",
-  translate("Endpoint Port"),
-  translate("Optional. Port of peer."))
-endpoint_port.placeholder = "51820"
-endpoint_port.datatype = "port"
-
-
-persistent_keepalive = peers:option(
-  Value,
-  "persistent_keepalive",
-  translate("Persistent Keep Alive"),
-  translate("Optional. Seconds between keep alive messages. " ..
-            "Default is 0 (disabled). Recommended value if " ..
-            "this device is behind a NAT is 25."))
-persistent_keepalive.datatype = "range(0, 65535)"
-persistent_keepalive.placeholder = "0"
+-- Modern IPv6 support notice
+local ipv6_note = section:taboption("general", DummyValue, "_ipv6_note")
+ipv6_note.title = " "
+ipv6_note.rawhtml = true
+ipv6_note.value = function()
+  return [[
+  <div style="margin:20px 0 10px 0; padding:15px; background:linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+              border-left:4px solid #0066cc; border-radius:4px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+    <div style="display:flex; align-items:center;">
+      <div style="font-size:24px; margin-right:15px;">🌐</div>
+      <div>
+        <strong style="color:#0066cc; font-size:16px;">]] .. translate("IPv6 Support") .. [[</strong>
+        <p style="margin:5px 0 0 0; color:#444;">
+          ]] .. translate("IPv6 addresses are fully supported. Use them to connect devices without public IPv4.") .. [[
+        </p>
+      </div>
+    </div>
+  </div>
+  ]]
+end
