@@ -11,14 +11,28 @@ local metric, mtu, preshared_key
 -- key generation function
 local function generate_key_pair()
   local util = require("luci.util")
-  local private = util.exec("wg genkey 2>/dev/null")
+
+-- Generate private key and preshared key separately
+  local private_cmd = util.exec("wg genkey 2>/dev/null")
+  local preshared_cmd = util.exec("wg genkey 2>/dev/null")
+
+  local private = ""
+  local preshared = ""
   local public = ""
-  if private and #private > 0 then
-    private = private:gsub("\n", "")
+  
+-- Process private key and generate public key
+  if private_cmd and #private_cmd > 0 then
+    private = private_cmd:gsub("\n", "")
     public = util.exec("echo -n '" .. private .. "' | wg pubkey 2>/dev/null")
     public = public:gsub("\n", "")
   end
-  return private, public
+  
+-- Process preshared key
+  if preshared_cmd and #preshared_cmd > 0 then
+    preshared = preshared_cmd:gsub("\n", "")
+  end
+
+  return private, public, preshared
 end
 
 
@@ -54,7 +68,7 @@ gen_btn.title = " "
 gen_btn.inputtitle = translate("Generate Keys")
 gen_btn.inputstyle = "apply"
 gen_btn.write = function()
-  local private, public = generate_key_pair()
+  local private, public, preshared = generate_key_pair()
   if private and public then
     luci.http.prepare_content("text/html")
     luci.http.write([[
@@ -62,26 +76,34 @@ gen_btn.write = function()
     <html>
     <head><meta charset="utf-8"><title>]] .. translate("WireGuard Keys Generated") .. [[</title>
     <style>
-      body { font-family:sans-serif; padding:30px; background:#f9f9f9; color:#333; }
-      h3 { color:#0066cc; margin-bottom:20px; }
+      body { font-family: 'Helvetica', Arial, sans-serif; padding:30px; background:#f9f9f9; color:#333; line-height: 1.6; }
+      h3 { color:#0066cc; margin-bottom:20px; font-size: 24px; }
       .key-box { background:#fff; border:1px solid #ccc; border-radius:4px; padding:15px; 
-                margin:15px 0; font-family:monospace; word-break:break-all; }
+                margin:15px 0; font-family:monospace; word-break:break-all; color: #000000; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
       .warning { background:#fff3cd; border:1px solid #ffc107; color:#856404; 
                  padding:10px; border-radius:4px; margin:15px 0; }
+      .key-label { font-weight: bold; margin-bottom: 5px; color: #444444; font-size: 16px; }
       .private-key { background:#fff0f0; border-color:#dc3545; }
+      .private-key { background:#f0f7ff; border-color:#0066cc; }
       button { background:#0066cc; color:white; border:none; padding:10px 20px; 
-               border-radius:4px; margin:5px; cursor:pointer; }
+               border-radius:4px; margin:5px; cursor:pointer; transition: background 0.3s; }
       button:hover { background:#0052a3; }
       button.copy { background:#28a745; }
+      button.copy:hover { background: #218838; }
+      .note { color: #666666; font-size: 13px; margin-top: 5px; margin-bottom: 20px; }
+      .key-container { margin-bottom: 25px; }
+      .key-box { background: #ffffff; border: 1px solid #cccccc; border-radius: 4px; padding: 15px; margin: 10px 0; font-family: monospace; font-size: 14px; word-break: break-all; color: #000000; }
     </style>
     <script>
     var keyData = {
       private: "]] .. escape_json_string(private) .. [[",
-      public: "]] .. escape_json_string(public) .. [["
+      public: "]] .. escape_json_string(public) .. [[",
+      preshared: "]] .. escape_json_string(preshared) .. [["
     };
     
     function copyToClipboard(type) {
-      var text = type === 'private' ? keyData.private : keyData.public;
+      var text = type === 'private' ? keyData.private : 
+                  (type === 'public' ? keyData.public : keyData.preshared);
       var textarea = document.createElement('textarea');
       textarea.value = text;
       document.body.appendChild(textarea);
@@ -102,6 +124,7 @@ gen_btn.write = function()
     window.onload = function() {
       document.getElementById('private_key_display').textContent = keyData.private;
       document.getElementById('public_key_display').textContent = keyData.public;
+      document.getElementById('preshared_key_display').textContent = keyData.preshared;
     };
     </script>
     </head>
@@ -109,15 +132,28 @@ gen_btn.write = function()
       <h3>🔑 ]] .. translate("WireGuard Keys Generated") .. [[</h3>
       <div class="warning"><strong>⚠️ ]] .. translate("Private Key MUST be kept secret!") .. [[</strong></div>
       
-      <div class="key-label">🔒 ]] .. translate("Private Key (SECRET)") .. [[</div>
-      <div class="key-box private-key" id="private_key_display"></div>
-      <button class="copy" onclick="copyToClipboard('private')">📋 ]] .. translate("Copy Private Key") .. [[</button>
+      <div class="key-container">
+        <div class="key-label">🔒 ]] .. translate("Private Key (SECRET - Keep safe!)") .. [[</div>
+        <div class="key-box private-key" id="private_key_display"></div>
+        <button class="copy" onclick="copyToClipboard('private')">📋 ]] .. translate("Copy Private Key") .. [[</button>
+      </div>
       
-      <div class="key-label" style="margin-top:25px;">🔓 ]] .. translate("Public Key (Share)") .. [[</div>
-      <div class="key-box" id="public_key_display"></div>
-      <button class="copy" onclick="copyToClipboard('public')">📋 ]] .. translate("Copy Public Key") .. [[</button>
+      <div class="key-container">
+        <div class="key-label">🔓 ]] .. translate("Public Key (Share with peers)") .. [[</div>
+        <div class="key-box" id="public_key_display"></div>
+        <button class="copy" onclick="copyToClipboard('public')">📋 ]] .. translate("Copy Public Key") .. [[</button>
+      </div>
+
+      <div class="key-container">
+        <div class="key-label">🔐 ]] .. translate("Preshared Key (Optional - Extra security)") .. [[</div>
+        <div class="key-box preshared-key" id="preshared_key_display"></div>
+        <button class="copy" onclick="copyToClipboard('preshared')">📋 ]] .. translate("Copy Preshared Key") .. [[</button>
+        <div class="note">]] .. translate("Preshared key adds post-quantum resistance. Share with peer securely.") .. [[</div>
+      </div>
       
-      <p><button class="close" onclick="closeWindow()">✖ ]] .. translate("Close Window") .. [[</button></p>
+      <p style="text-align:center; margin-top:30px;">
+        <button class="close" onclick="closeWindow()">✖ ]] .. translate("Close Window") .. [[</button>
+      </p>
     </body>
     </html>
     ]])
